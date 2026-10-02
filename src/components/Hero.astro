@@ -1,7 +1,4 @@
 ---
-import { getLangFromUrl, t, type Lang } from "../i18n";
-
-const lang: Lang = getLangFromUrl(Astro.url);
 ---
 
 <section
@@ -10,22 +7,24 @@ const lang: Lang = getLangFromUrl(Astro.url);
 >
   <div class="absolute inset-0 bg-black/40"></div>
   <div class="relative z-10 text-center px-4">
-    <h1 class="text-5xl md:text-7xl font-bold mb-4 text-white drop-shadow-lg">
-      {t(lang, "hero.name")}
+    <h1 class="text-5xl md:text-7xl font-bold mb-4 text-white drop-shadow-lg" data-i18n="hero.name">
+      Choirul Haq
     </h1>
-    <p class="text-xl md:text-2xl mb-8 text-white/90 drop-shadow">
-      {t(lang, "hero.tagline")}
+    <p class="text-xl md:text-2xl mb-8 text-white/90 drop-shadow" data-i18n="hero.tagline">
+      Tech Enthusiast & Lifelong Learner
     </p>
     <div class="flex gap-4 justify-center">
       <a
         href="#hobi"
         class="bg-white text-purple-700 px-6 py-3 rounded-lg font-semibold hover:bg-purple-50 transition shadow-lg"
-        >{t(lang, "hero.ctaHobi")}</a
+        data-i18n="hero.ctaHobi"
+        >Lihat Hobi</a
       >
       <a
         href="#kontak"
         class="border-2 border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-purple-700 transition"
-        >{t(lang, "hero.ctaContact")}</a
+        data-i18n="hero.ctaContact"
+        >Hubungi Saya</a
       >
     </div>
   </div>

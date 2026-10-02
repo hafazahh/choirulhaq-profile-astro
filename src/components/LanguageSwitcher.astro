@@ -1,30 +1,120 @@
 ---
-import { getLangFromUrl, type Lang } from "../i18n";
-
-const lang: Lang = getLangFromUrl(Astro.url);
 ---
 
 <div class="fixed top-4 right-4 z-50 flex gap-2">
-  <a
-    href={`?lang=id`}
-    class={`flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-medium shadow-md transition ${
-      lang === "id"
-        ? "bg-purple-700 text-white"
-        : "bg-white text-purple-700 hover:bg-purple-50"
-    }`}
+  <button
+    data-lang-btn="id"
+    class="lang-btn flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-medium shadow-md transition bg-white text-purple-700 hover:bg-purple-50"
   >
     <span class="text-base">🇮🇩</span>
     <span>ID</span>
-  </a>
-  <a
-    href={`?lang=en`}
-    class={`flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-medium shadow-md transition ${
-      lang === "en"
-        ? "bg-purple-700 text-white"
-        : "bg-white text-purple-700 hover:bg-purple-50"
-    }`}
+  </button>
+  <button
+    data-lang-btn="en"
+    class="lang-btn flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-medium shadow-md transition bg-white text-purple-700 hover:bg-purple-50"
   >
     <span class="text-base">🇺🇸</span>
     <span>EN</span>
-  </a>
+  </button>
 </div>
+
+<script>
+  const dictionaries = {
+    id: {
+      "hero.name": "Choirul Haq",
+      "hero.tagline": "Tech Enthusiast & Lifelong Learner",
+      "hero.ctaHobi": "Lihat Hobi",
+      "hero.ctaContact": "Hubungi Saya",
+      "about.title": "Tentang Saya",
+      "about.p1": "Halo! Saya Choirul Haq, seorang teknolog yang tertarik pada pemrograman, jaringan komputer, dan teknologi drone. Saya percaya belajar adalah perjalanan seumur hidup.",
+      "about.p2": "Dengan pengalaman di Java, Python, PHP, dan simulasi jaringan menggunakan Cisco Packet Tracer serta PNETLab, saya selalu berusaha mengembangkan keterampilan teknis dan kreativitas saya.",
+      "about.p3": "Di luar teknologi, saya gemar menambah bacaan buku tema apa pun — dari fiksi hingga non-fiksi. Saya juga senang melatih daya pikir dengan belajar beberapa buku matematika.",
+      "hobi.title": "Hobi",
+      "hobi.pemrograman.title": "Pemrograman",
+      "hobi.pemrograman.desc": "Mengembangkan logika dan kreativitas melalui berbagai bahasa pemrograman.",
+      "hobi.networking.title": "Networking",
+      "hobi.networking.desc": "Belajar simulasi jaringan komputer dengan tools industri.",
+      "hobi.drone.title": "Drone",
+      "hobi.drone.desc": "Mengeksplorasi dunia drone — foto, video, dan teknologi UAV.",
+      "hobi.membaca.title": "Membaca Buku",
+      "hobi.membaca.desc": "Menemukan ide baru dan inspirasi dari halaman buku.",
+      "tutorial.title": "Tutorial",
+      "tutorial.python.title": "Python",
+      "tutorial.python.desc": "Tutorial pemrograman Python dari dasar hingga lanjutan.",
+      "tutorial.java.title": "Java",
+      "tutorial.java.desc": "Tutorial pemrograman Java untuk aplikasi desktop dan web.",
+      "tutorial.sqlserver.title": "Database SQL Server",
+      "tutorial.sqlserver.desc": "Tutorial database SQL Server — desain, query, dan administrasi.",
+      "tutorial.networking.title": "Networking",
+      "tutorial.networking.desc": "Tutorial jaringan komputer dengan Cisco Packet Tracer dan PNETLab.",
+      "tutorial.hacking.title": "Hacking",
+      "tutorial.hacking.desc": "Tutorial ethical hacking dan keamanan siber.",
+      "contact.title": "Hubungi Saya",
+      "footer.backToHome": "← Kembali ke Profil",
+    },
+    en: {
+      "hero.name": "Choirul Haq",
+      "hero.tagline": "Tech Enthusiast & Lifelong Learner",
+      "hero.ctaHobi": "View Hobbies",
+      "hero.ctaContact": "Contact Me",
+      "about.title": "About Me",
+      "about.p1": "Hello! I'm Choirul Haq, a technologist interested in programming, computer networks, and drone technology. I believe learning is a lifelong journey.",
+      "about.p2": "With experience in Java, Python, PHP, and network simulation using Cisco Packet Tracer and PNETLab, I always strive to develop my technical skills and creativity.",
+      "about.p3": "Outside of technology, I love adding reading material on any topic — from fiction to non-fiction. I also enjoy training my thinking by studying mathematics books.",
+      "hobi.title": "Hobbies",
+      "hobi.pemrograman.title": "Programming",
+      "hobi.pemrograman.desc": "Developing logic and creativity through various programming languages.",
+      "hobi.networking.title": "Networking",
+      "hobi.networking.desc": "Learning computer network simulation with industry tools.",
+      "hobi.drone.title": "Drone",
+      "hobi.drone.desc": "Exploring the world of drones — photos, videos, and UAV technology.",
+      "hobi.membaca.title": "Reading Books",
+      "hobi.membaca.desc": "Finding new ideas and inspiration from book pages.",
+      "tutorial.title": "Tutorials",
+      "tutorial.python.title": "Python",
+      "tutorial.python.desc": "Python programming tutorial from basics to advanced.",
+      "tutorial.java.title": "Java",
+      "tutorial.java.desc": "Java programming tutorial for desktop and web applications.",
+      "tutorial.sqlserver.title": "Database SQL Server",
+      "tutorial.sqlserver.desc": "SQL Server database tutorial — design, queries, and administration.",
+      "tutorial.networking.title": "Networking",
+      "tutorial.networking.desc": "Computer networking tutorial with Cisco Packet Tracer and PNETLab.",
+      "tutorial.hacking.title": "Hacking",
+      "tutorial.hacking.desc": "Ethical hacking and cybersecurity tutorial.",
+      "contact.title": "Contact Me",
+      "footer.backToHome": "← Back to Profile",
+    },
+  };
+
+  function getLang() {
+    return localStorage.getItem("lang") === "en" ? "en" : "id";
+  }
+
+  function applyLang(lang) {
+    document.querySelectorAll("[data-i18n]").forEach((el) => {
+      const key = el.getAttribute("data-i18n");
+      if (key && dictionaries[lang][key]) {
+        el.textContent = dictionaries[lang][key];
+      }
+    });
+    document.documentElement.lang = lang;
+    document.querySelectorAll("[data-lang-btn]").forEach((btn) => {
+      const isActive = btn.getAttribute("data-lang-btn") === lang;
+      btn.className = `lang-btn flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-medium shadow-md transition ${
+        isActive
+          ? "bg-purple-700 text-white"
+          : "bg-white text-purple-700 hover:bg-purple-50"
+      }`;
+    });
+  }
+
+  document.querySelectorAll("[data-lang-btn]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const lang = btn.getAttribute("data-lang-btn");
+      localStorage.setItem("lang", lang);
+      applyLang(lang);
+    });
+  });
+
+  applyLang(getLang());
+</script>

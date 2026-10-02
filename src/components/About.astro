@@ -1,12 +1,9 @@
 ---
-import { getLangFromUrl, t, type Lang } from "../i18n";
-
-const lang: Lang = getLangFromUrl(Astro.url);
 ---
 
 <section id="tentang" class="py-20 px-4 max-w-4xl mx-auto">
-  <h2 class="text-3xl md:text-4xl font-bold text-center mb-8 text-purple-900">
-    {t(lang, "about.title")}
+  <h2 class="text-3xl md:text-4xl font-bold text-center mb-8 text-purple-900" data-i18n="about.title">
+    Tentang Saya
   </h2>
   <div class="flex flex-col md:flex-row items-center gap-8">
     <img
@@ -18,9 +15,15 @@ const lang: Lang = getLangFromUrl(Astro.url);
       class="w-48 h-48 rounded-full shadow-lg"
     />
     <div class="text-lg text-gray-700 leading-relaxed">
-      <p class="mb-4">{t(lang, "about.p1")}</p>
-      <p class="mb-4">{t(lang, "about.p2")}</p>
-      <p>{t(lang, "about.p3")}</p>
+      <p class="mb-4" data-i18n="about.p1">
+        Halo! Saya Choirul Haq, seorang teknolog yang tertarik pada pemrograman, jaringan komputer, dan teknologi drone. Saya percaya belajar adalah perjalanan seumur hidup.
+      </p>
+      <p class="mb-4" data-i18n="about.p2">
+        Dengan pengalaman di Java, Python, PHP, dan simulasi jaringan menggunakan Cisco Packet Tracer serta PNETLab, saya selalu berusaha mengembangkan keterampilan teknis dan kreativitas saya.
+      </p>
+      <p data-i18n="about.p3">
+        Di luar teknologi, saya gemar menambah bacaan buku tema apa pun — dari fiksi hingga non-fiksi. Saya juga senang melatih daya pikir dengan belajar beberapa buku matematika.
+      </p>
     </div>
   </div>
 </section>

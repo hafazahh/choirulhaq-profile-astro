@@ -1,12 +1,8 @@
 ---
-import { getLangFromUrl, t, type Lang } from "../i18n";
-
-const lang: Lang = getLangFromUrl(Astro.url);
-
 const tutorials = [
   {
-    titleKey: "tutorial.items.python.title",
-    descKey: "tutorial.items.python.desc",
+    titleKey: "tutorial.python.title",
+    descKey: "tutorial.python.desc",
     icon: "🐍",
     topics: ["Dasar Python", "OOP", "Web Framework", "Data Science", "Machine Learning"],
     link: "/python#dasar",
@@ -18,8 +14,8 @@ const tutorials = [
     },
   },
   {
-    titleKey: "tutorial.items.java.title",
-    descKey: "tutorial.items.java.desc",
+    titleKey: "tutorial.java.title",
+    descKey: "tutorial.java.desc",
     icon: "☕",
     topics: ["Dasar Java", "OOP", "Spring Boot", "Database"],
     link: "/java#dasar",
@@ -30,8 +26,8 @@ const tutorials = [
     },
   },
   {
-    titleKey: "tutorial.items.sqlserver.title",
-    descKey: "tutorial.items.sqlserver.desc",
+    titleKey: "tutorial.sqlserver.title",
+    descKey: "tutorial.sqlserver.desc",
     icon: "🗄️",
     topics: ["DDL & DML", "Join", "Stored Procedure", "Backup & Restore"],
     link: "/sqlserver#ddl",
@@ -42,8 +38,8 @@ const tutorials = [
     },
   },
   {
-    titleKey: "tutorial.items.networking.title",
-    descKey: "tutorial.items.networking.desc",
+    titleKey: "tutorial.networking.title",
+    descKey: "tutorial.networking.desc",
     icon: "🌐",
     topics: ["Cisco Packet Tracer", "PNETLab", "Routing & Switching", "Network Security"],
     link: "/networking#cisco",
@@ -54,8 +50,8 @@ const tutorials = [
     },
   },
   {
-    titleKey: "tutorial.items.hacking.title",
-    descKey: "tutorial.items.hacking.desc",
+    titleKey: "tutorial.hacking.title",
+    descKey: "tutorial.hacking.desc",
     icon: "🔐",
     topics: ["Network Security", "Penetration Testing", "Web Security", "Forensics"],
     link: "/hacking#network",
@@ -70,8 +66,8 @@ const tutorials = [
 
 <section id="tutorial" class="py-20 px-4">
   <div class="max-w-4xl mx-auto">
-    <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 text-purple-900">
-      {t(lang, "tutorial.title")}
+    <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 text-purple-900" data-i18n="tutorial.title">
+      Tutorial
     </h2>
     <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" role="list">
       {tutorials.map((tutorial) => (
@@ -79,8 +75,12 @@ const tutorials = [
           {tutorial.link ? (
             <a href={tutorial.link} class="block">
               <div class="text-4xl mb-3" aria-hidden="true">{tutorial.icon}</div>
-              <h3 class="text-xl font-bold mb-2 text-purple-800">{t(lang, tutorial.titleKey)}</h3>
-              <p class="text-gray-600 text-sm mb-3">{t(lang, tutorial.descKey)}</p>
+              <h3 class="text-xl font-bold mb-2 text-purple-800" data-i18n={tutorial.titleKey}>
+                {tutorial.titleKey}
+              </h3>
+              <p class="text-gray-600 text-sm mb-3" data-i18n={tutorial.descKey}>
+                {tutorial.descKey}
+              </p>
               <ul class="space-y-1">
                 {tutorial.topics.map((topic) => (
                   <li class="text-purple-700 font-medium text-sm">
@@ -96,8 +96,12 @@ const tutorials = [
           ) : (
             <>
               <div class="text-4xl mb-3" aria-hidden="true">{tutorial.icon}</div>
-              <h3 class="text-xl font-bold mb-2 text-purple-800">{t(lang, tutorial.titleKey)}</h3>
-              <p class="text-gray-600 text-sm mb-3">{t(lang, tutorial.descKey)}</p>
+              <h3 class="text-xl font-bold mb-2 text-purple-800" data-i18n={tutorial.titleKey}>
+                {tutorial.titleKey}
+              </h3>
+              <p class="text-gray-600 text-sm mb-3" data-i18n={tutorial.descKey}>
+                {tutorial.descKey}
+              </p>
               <ul class="space-y-1">
                 {tutorial.topics.map((topic) => (
                   <li class="text-purple-700 font-medium text-sm">• {topic}</li>

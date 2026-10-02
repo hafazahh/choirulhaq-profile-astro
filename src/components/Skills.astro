@@ -1,8 +1,4 @@
 ---
-import { getLangFromUrl, t, type Lang } from "../i18n";
-
-const lang: Lang = getLangFromUrl(Astro.url);
-
 const hobiKeys = ["pemrograman", "networking", "drone", "membaca"] as const;
 const icons: Record<string, string> = {
   pemrograman: "💻",
@@ -14,25 +10,20 @@ const icons: Record<string, string> = {
 
 <section id="hobi" class="py-20 px-4 bg-purple-50">
   <div class="max-w-4xl mx-auto">
-    <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 text-purple-900">
-      {t(lang, "hobi.title")}
+    <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 text-purple-900" data-i18n="hobi.title">
+      Hobi
     </h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
       {
         hobiKeys.map((key) => (
           <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition">
             <div class="text-4xl mb-3" aria-hidden="true">{icons[key]}</div>
-            <h3 class="text-xl font-bold mb-2 text-purple-800">
-              {t(lang, `hobi.items.${key}.title`)}
+            <h3 class="text-xl font-bold mb-2 text-purple-800" data-i18n={`hobi.${key}.title`}>
+              {key}
             </h3>
-            <p class="text-gray-600 text-sm mb-3">
-              {t(lang, `hobi.items.${key}.desc`)}
+            <p class="text-gray-600 text-sm mb-3" data-i18n={`hobi.${key}.desc`}>
+              {key}
             </p>
-            <ul class="space-y-1">
-              {t(lang, `hobi.items.${key}.items`).map((item: string) => (
-                <li class="text-purple-700 font-medium text-sm">• {item}</li>
-              ))}
-            </ul>
           </div>
         ))
       }
