@@ -24,18 +24,22 @@ export const en = {
       pemrograman: {
         title: "Programming",
         desc: "Developing logic and creativity through various programming languages.",
+        items: ["Java", "Python", "PHP"],
       },
       networking: {
         title: "Networking",
         desc: "Learning computer network simulation with industry tools.",
+        items: ["Cisco Packet Tracer", "PNETLab"],
       },
       drone: {
         title: "Drone",
         desc: "Exploring the world of drones — photos, videos, and UAV technology.",
+        items: ["Gallery", "Video"],
       },
       membaca: {
         title: "Reading Books",
         desc: "Finding new ideas and inspiration from book pages.",
+        items: ["Fiction", "Non-Fiction", "Technology"],
       },
     },
   },

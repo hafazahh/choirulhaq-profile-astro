@@ -24,18 +24,22 @@ export const id = {
       pemrograman: {
         title: "Pemrograman",
         desc: "Mengembangkan logika dan kreativitas melalui berbagai bahasa pemrograman.",
+        items: ["Java", "Python", "PHP"],
       },
       networking: {
         title: "Networking",
         desc: "Belajar simulasi jaringan komputer dengan tools industri.",
+        items: ["Cisco Packet Tracer", "PNETLab"],
       },
       drone: {
         title: "Drone",
         desc: "Mengeksplorasi dunia drone — foto, video, dan teknologi UAV.",
+        items: ["Gallery", "Video"],
       },
       membaca: {
         title: "Membaca Buku",
         desc: "Menemukan ide baru dan inspirasi dari halaman buku.",
+        items: ["Fiksi", "Non-Fiksi", "Teknologi"],
       },
     },
   },

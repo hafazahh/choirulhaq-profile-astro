@@ -28,6 +28,11 @@ const icons: Record<string, string> = {
             <p class="text-gray-600 text-sm mb-3">
               {t(lang, `hobi.items.${key}.desc`)}
             </p>
+            <ul class="space-y-1">
+              {t(lang, `hobi.items.${key}.items`).map((item: string) => (
+                <li class="text-purple-700 font-medium text-sm">• {item}</li>
+              ))}
+            </ul>
           </div>
         ))
       }
