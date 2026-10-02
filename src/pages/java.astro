@@ -1,0 +1,167 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const topics = [
+  {
+    id: "dasar",
+    title: "Dasar Java",
+    icon: "☕",
+    desc: "Variabel, tipe data, control flow, dan fungsi.",
+    latihan: [
+      {
+        soal: "Buat class HelloWorld yang menampilkan 'Hello, World!'.",
+        contoh: `public class HelloWorld {\n    public static void main(String[] args) {\n        System.out.println("Hello, World!");\n    }\n}`,
+      },
+      {
+        soal: "Buat program kalkulator sederhana dengan method.",
+        contoh: `public class Kalkulator {\n    int tambah(int a, int b) { return a + b; }\n    int kurang(int a, int b) { return a - b; }\n}`,
+      },
+      {
+        soal: "Buat program yang menentukan bilangan ganjil/genap.",
+        contoh: `int n = 7;\nif (n % 2 == 0) System.out.println("Genap");\nelse System.out.println("Ganjil");`,
+      },
+      {
+        soal: "Buat program yang menampilkan bilangan 1 sampai 100 dengan for loop.",
+        contoh: `for (int i = 1; i <= 100; i++) {\n    System.out.println(i);\n}`,
+      },
+      {
+        soal: "Buat fungsi yang menghitung luas persegi panjang.",
+        contoh: `int luas(int p, int l) {\n    return p * l;\n}`,
+      },
+    ],
+  },
+  {
+    id: "oop",
+    title: "OOP",
+    icon: "☕",
+    desc: "Class, object, inheritance, dan encapsulation.",
+    latihan: [
+      {
+        soal: "Buat class Mahasiswa dengan atribut nama, nim, dan jurusan.",
+        contoh: `class Mahasiswa {\n    String nama, nim, jurusan;\n    Mahasiswa(String n, String ni, String j) {\n        nama = n; nim = ni; jurusan = j;\n    }\n}`,
+      },
+      {
+        soal: "Buat class Kalkulator dengan method tambah, kurang, kali, bagi.",
+        contoh: `class Kalkulator {\n    int tambah(int a, int b) { return a + b; }\n    int kurang(int a, int b) { return a - b; }\n}`,
+      },
+      {
+        soal: "Buat inheritance: class Hewan dan class Kucing yang mewarisi Hewan.",
+        contoh: `class Hewan {\n    String nama;\n    String suara() { return "..."; }\n}\nclass Kucing extends Hewan {\n    String suara() { return "Meong!"; }\n}`,
+      },
+      {
+        soal: "Buat encapsulation dengan private attribute dan getter/setter.",
+        contoh: `class Bank {\n    private int saldo;\n    int getSaldo() { return saldo; }\n    void setSaldo(int n) { if (n >= 0) saldo = n; }\n}`,
+      },
+      {
+        soal: "Buat class Persegi dengan method luas dan keliling.",
+        contoh: `class Persegi {\n    int sisi;\n    int luas() { return sisi * sisi; }\n    int keliling() { return 4 * sisi; }\n}`,
+      },
+    ],
+  },
+  {
+    id: "spring",
+    title: "Spring Boot",
+    icon: "🌱",
+    desc: "Membuat REST API dengan Spring Boot.",
+    latihan: [
+      {
+        soal: "Buat project Spring Boot dengan Spring Initializr.",
+        contoh: `https://start.spring.io/\nPilih: Maven, Java, Spring Web\nGenerate dan import ke IDE`,
+      },
+      {
+        soal: "Buat controller dengan endpoint '/' yang mengembalikan 'Hello World'.",
+        contoh: `@RestController\npublic class HelloController {\n    @GetMapping("/")\n    public String hello() {\n        return "Hello World";\n    }\n}`,
+      },
+      {
+        soal: "Buat endpoint dengan parameter: '/user/{nama}'.",
+        contoh: `@GetMapping("/user/{nama}")\npublic String user(@PathVariable String nama) {\n    return "Halo, " + nama + "!";\n}`,
+      },
+      {
+        soal: "Buat POST endpoint yang menerima JSON.",
+        contoh: `@PostMapping("/user")\npublic User createUser(@RequestBody User user) {\n    return user;\n}`,
+      },
+      {
+        soal: "Buat model class dengan JPA annotation.",
+        contoh: `@Entity\npublic class User {\n    @Id @GeneratedValue\n    Long id;\n    String nama;\n    // getter & setter\n}`,
+      },
+    ],
+  },
+  {
+    id: "database",
+    title: "Database",
+    icon: "🗄️",
+    desc: "Koneksi database dengan JDBC.",
+    latihan: [
+      {
+        soal: "Buat koneksi database dengan JDBC.",
+        contoh: `Connection conn = DriverManager.getConnection(\n    "jdbc:mysql://localhost:3306/db", "user", "pass");`,
+      },
+      {
+        soal: "Buat tabel dengan SQL.",
+        contoh: `CREATE TABLE users (\n    id INT PRIMARY KEY AUTO_INCREMENT,\n    nama VARCHAR(100),\n    email VARCHAR(100)\n);`,
+      },
+      {
+        soal: "Insert data ke tabel.",
+        contoh: `PreparedStatement ps = conn.prepareStatement(\n    "INSERT INTO users (nama, email) VALUES (?, ?)");\nps.setString(1, "Choirul");\nps.setString(2, "choirul@gmail.com");\nps.executeUpdate();`,
+      },
+      {
+        soal: "Select data dari tabel.",
+        contoh: `Statement stmt = conn.createStatement();\nResultSet rs = stmt.executeQuery("SELECT * FROM users");\nwhile (rs.next()) {\n    System.out.println(rs.getString("nama"));\n}`,
+      },
+      {
+        soal: "Update dan delete data.",
+        contoh: `// Update\nPreparedStatement ps = conn.prepareStatement(\n    "UPDATE users SET nama=? WHERE id=?");\nps.setString(1, "Choirul Haq");\nps.setInt(2, 1);\nps.executeUpdate();\n\n// Delete\nps = conn.prepareStatement("DELETE FROM users WHERE id=?");\nps.setInt(1, 1);\nps.executeUpdate();`,
+      },
+    ],
+  },
+];
+---
+
+<BaseLayout title="Tutorial Java - Choirul Haq">
+  <section class="py-20 px-4 bg-gradient-to-br from-purple-50 to-sky-50">
+    <div class="max-w-4xl mx-auto">
+      <h1 class="text-4xl md:text-5xl font-bold text-center mb-4 text-purple-900">
+        ☕ Tutorial Java
+      </h1>
+      <p class="text-center text-gray-600 mb-12 text-lg">
+        Belajar Java dari dasar hingga Spring Boot dengan latihan interaktif.
+      </p>
+
+      <div class="space-y-12">
+        {
+          topics.map((topic) => (
+            <div id={topic.id} class="bg-white rounded-xl shadow-lg p-8">
+              <div class="flex items-center gap-4 mb-4">
+                <span class="text-4xl">{topic.icon}</span>
+                <div>
+                  <h2 class="text-2xl font-bold text-purple-800">{topic.title}</h2>
+                  <p class="text-gray-600">{topic.desc}</p>
+                </div>
+              </div>
+
+              <div class="space-y-6">
+                {topic.latihan.map((lat, i) => (
+                  <div class="bg-purple-50 rounded-lg p-4">
+                    <h3 class="font-semibold text-purple-900 mb-2">
+                      Latihan {i + 1}: {lat.soal}
+                    </h3>
+                    <pre class="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto text-sm"><code>{lat.contoh}</code></pre>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))
+        }
+      </div>
+
+      <div class="mt-12 text-center">
+        <a
+          href="/"
+          class="inline-block bg-purple-700 text-white px-8 py-3 rounded-lg font-semibold hover:bg-purple-800 transition"
+        >
+          ← Kembali ke Profil
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

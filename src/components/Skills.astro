@@ -1,0 +1,52 @@
+---
+const hobi = [
+  {
+    title: "Pemrograman",
+    icon: "💻",
+    items: ["Java", "Python", "PHP"],
+    desc: "Mengembangkan logika dan kreativitas melalui berbagai bahasa pemrograman.",
+  },
+  {
+    title: "Networking",
+    icon: "🌐",
+    items: ["Cisco Packet Tracer", "PNETLab"],
+    desc: "Belajar simulasi jaringan komputer dengan tools industri.",
+  },
+  {
+    title: "Drone",
+    icon: "🚁",
+    items: ["Gallery", "Video"],
+    desc: "Mengeksplorasi dunia drone — foto, video, dan teknologi UAV.",
+  },
+  {
+    title: "Membaca Buku",
+    icon: "📚",
+    items: ["Fiksi", "Non-Fiksi", "Teknologi"],
+    desc: "Menemukan ide baru dan inspirasi dari halaman buku.",
+  },
+];
+---
+
+<section id="hobi" class="py-20 px-4 bg-purple-50">
+  <div class="max-w-4xl mx-auto">
+    <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 text-purple-900">
+      Hobi
+    </h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {
+        hobi.map((h) => (
+          <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition">
+            <div class="text-4xl mb-3" aria-hidden="true">{h.icon}</div>
+            <h3 class="text-xl font-bold mb-2 text-purple-800">{h.title}</h3>
+            <p class="text-gray-600 text-sm mb-3">{h.desc}</p>
+            <ul class="space-y-1">
+              {h.items.map((item) => (
+                <li class="text-purple-700 font-medium text-sm">• {item}</li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

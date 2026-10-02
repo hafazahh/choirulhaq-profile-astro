@@ -1,0 +1,167 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const topics = [
+  {
+    id: "ddl",
+    title: "DDL & DML",
+    icon: "🗄️",
+    desc: "Membuat tabel, insert, update, delete data.",
+    latihan: [
+      {
+        soal: "Buat database baru.",
+        contoh: `CREATE DATABASE db_school;`,
+      },
+      {
+        soal: "Buat tabel dengan primary key dan foreign key.",
+        contoh: `CREATE TABLE students (\n    id INT PRIMARY KEY IDENTITY(1,1),\n    nama NVARCHAR(100),\n    email NVARCHAR(100)\n);`,
+      },
+      {
+        soal: "Insert data ke tabel.",
+        contoh: `INSERT INTO students (nama, email)\nVALUES ('Choirul', 'choirul@gmail.com');`,
+      },
+      {
+        soal: "Update data di tabel.",
+        contoh: `UPDATE students\nSET nama = 'Choirul Haq'\nWHERE id = 1;`,
+      },
+      {
+        soal: "Delete data dari tabel.",
+        contoh: `DELETE FROM students\nWHERE id = 1;`,
+      },
+    ],
+  },
+  {
+    id: "join",
+    title: "Join",
+    icon: "🔗",
+    desc: "Menggabungkan data dari beberapa tabel.",
+    latihan: [
+      {
+        soal: "Buat dua tabel yang berelasi.",
+        contoh: `CREATE TABLE orders (\n    id INT PRIMARY KEY,\n    student_id INT,\n    product NVARCHAR(100),\n    FOREIGN KEY (student_id) REFERENCES students(id)\n);`,
+      },
+      {
+        soal: "INNER JOIN — tampilkan data yang cocok dari kedua tabel.",
+        contoh: `SELECT s.nama, o.product\nFROM students s\nINNER JOIN orders o ON s.id = o.student_id;`,
+      },
+      {
+        soal: "LEFT JOIN — tampilkan semua data dari tabel kiri.",
+        contoh: `SELECT s.nama, o.product\nFROM students s\nLEFT JOIN orders o ON s.id = o.student_id;`,
+      },
+      {
+        soal: "RIGHT JOIN — tampilkan semua data dari tabel kanan.",
+        contoh: `SELECT s.nama, o.product\nFROM students s\nRIGHT JOIN orders o ON s.id = o.student_id;`,
+      },
+      {
+        soal: "Aggregate functions — COUNT, SUM, AVG, MIN, MAX.",
+        contoh: `SELECT COUNT(*) AS total FROM students;\nSELECT AVG(age) AS rata_usia FROM students;\nSELECT MAX(age) AS tertua FROM students;`,
+      },
+    ],
+  },
+  {
+    id: "procedure",
+    title: "Stored Procedure",
+    icon: "⚙️",
+    desc: "Membuat stored procedure untuk operasi database.",
+    latihan: [
+      {
+        soal: "Buat stored procedure sederhana.",
+        contoh: `CREATE PROCEDURE sp_get_students\nAS\nBEGIN\n    SELECT * FROM students;\nEND;`,
+      },
+      {
+        soal: "Eksekusi stored procedure.",
+        contoh: `EXEC sp_get_students;`,
+      },
+      {
+        soal: "Stored procedure dengan parameter.",
+        contoh: `CREATE PROCEDURE sp_get_student\n    @id INT\nAS\nBEGIN\n    SELECT * FROM students WHERE id = @id;\nEND;`,
+      },
+      {
+        soal: "Stored procedure untuk insert data.",
+        contoh: `CREATE PROCEDURE sp_insert_student\n    @nama NVARCHAR(100),\n    @email NVARCHAR(100)\nAS\nBEGIN\n    INSERT INTO students (nama, email)\n    VALUES (@nama, @email);\nEND;`,
+      },
+      {
+        soal: "Stored procedure dengan output parameter.",
+        contoh: `CREATE PROCEDURE sp_count_students\n    @total INT OUTPUT\nAS\nBEGIN\n    SELECT @total = COUNT(*) FROM students;\nEND;`,
+      },
+    ],
+  },
+  {
+    id: "backup",
+    title: "Backup & Restore",
+    icon: "💾",
+    desc: "Backup dan restore database SQL Server.",
+    latihan: [
+      {
+        soal: "Backup database.",
+        contoh: `BACKUP DATABASE db_school\nTO DISK = 'C:\\backup\\db_school.bak';`,
+      },
+      {
+        soal: "Backup dengan compression.",
+        contoh: `BACKUP DATABASE db_school\nTO DISK = 'C:\\backup\\db_school.bak'\nWITH COMPRESSION;`,
+      },
+      {
+        soal: "Restore database.",
+        contoh: `RESTORE DATABASE db_school\nFROM DISK = 'C:\\backup\\db_school.bak'\nWITH REPLACE;`,
+      },
+      {
+        soal: "Backup differential.",
+        contoh: `BACKUP DATABASE db_school\nTO DISK = 'C:\\backup\\db_school_diff.bak'\nWITH DIFFERENTIAL;`,
+      },
+      {
+        soal: "Restore differential.",
+        contoh: `RESTORE DATABASE db_school\nFROM DISK = 'C:\\backup\\db_school.bak'\nWITH NORECOVERY;\n\nRESTORE DATABASE db_school\nFROM DISK = 'C:\\backup\\db_school_diff.bak'\nWITH RECOVERY;`,
+      },
+    ],
+  },
+];
+---
+
+<BaseLayout title="Tutorial SQL Server - Choirul Haq">
+  <section class="py-20 px-4 bg-gradient-to-br from-purple-50 to-sky-50">
+    <div class="max-w-4xl mx-auto">
+      <h1 class="text-4xl md:text-5xl font-bold text-center mb-4 text-purple-900">
+        🗄️ Tutorial SQL Server
+      </h1>
+      <p class="text-center text-gray-600 mb-12 text-lg">
+        Belajar SQL Server dari DDL/DML hingga backup & restore.
+      </p>
+
+      <div class="space-y-12">
+        {
+          topics.map((topic) => (
+            <div id={topic.id} class="bg-white rounded-xl shadow-lg p-8">
+              <div class="flex items-center gap-4 mb-4">
+                <span class="text-4xl">{topic.icon}</span>
+                <div>
+                  <h2 class="text-2xl font-bold text-purple-800">{topic.title}</h2>
+                  <p class="text-gray-600">{topic.desc}</p>
+                </div>
+              </div>
+
+              <div class="space-y-6">
+                {topic.latihan.map((lat, i) => (
+                  <div class="bg-purple-50 rounded-lg p-4">
+                    <h3 class="font-semibold text-purple-900 mb-2">
+                      Latihan {i + 1}: {lat.soal}
+                    </h3>
+                    <pre class="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto text-sm"><code>{lat.contoh}</code></pre>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))
+        }
+      </div>
+
+      <div class="mt-12 text-center">
+        <a
+          href="/"
+          class="inline-block bg-purple-700 text-white px-8 py-3 rounded-lg font-semibold hover:bg-purple-800 transition"
+        >
+          ← Kembali ke Profil
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

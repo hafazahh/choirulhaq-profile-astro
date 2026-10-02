@@ -1,0 +1,108 @@
+---
+const tutorials = [
+  {
+    title: "Python",
+    icon: "🐍",
+    desc: "Tutorial pemrograman Python dari dasar hingga lanjutan.",
+    topics: ["Dasar Python", "OOP", "Web Framework", "Data Science", "Machine Learning"],
+    link: "/python#dasar",
+    topicLinks: {
+      "OOP": "/python#oop",
+      "Web Framework": "/python#web",
+      "Data Science": "/python#data",
+      "Machine Learning": "/python#ml",
+    },
+  },
+  {
+    title: "Java",
+    icon: "☕",
+    desc: "Tutorial pemrograman Java untuk aplikasi desktop dan web.",
+    topics: ["Dasar Java", "OOP", "Spring Boot", "Database"],
+    link: "/java#dasar",
+    topicLinks: {
+      "OOP": "/java#oop",
+      "Spring Boot": "/java#spring",
+      "Database": "/java#database",
+    },
+  },
+  {
+    title: "Database SQL Server",
+    icon: "🗄️",
+    desc: "Tutorial database SQL Server — desain, query, dan administrasi.",
+    topics: ["DDL & DML", "Join", "Stored Procedure", "Backup & Restore"],
+    link: "/sqlserver#ddl",
+    topicLinks: {
+      "Join": "/sqlserver#join",
+      "Stored Procedure": "/sqlserver#procedure",
+      "Backup & Restore": "/sqlserver#backup",
+    },
+  },
+  {
+    title: "Networking",
+    icon: "🌐",
+    desc: "Tutorial jaringan komputer dengan Cisco Packet Tracer dan PNETLab.",
+    topics: ["Cisco Packet Tracer", "PNETLab", "Routing & Switching", "Network Security"],
+    link: "/networking#cisco",
+    topicLinks: {
+      "PNETLab": "/networking#pnetlab",
+      "Routing & Switching": "/networking#routing",
+      "Network Security": "/networking#security",
+    },
+  },
+  {
+    title: "Hacking",
+    icon: "🔐",
+    desc: "Tutorial ethical hacking dan keamanan siber.",
+    topics: ["Network Security", "Penetration Testing", "Web Security", "Forensics"],
+    link: "/hacking#network",
+    topicLinks: {
+      "Penetration Testing": "/hacking#pentest",
+      "Web Security": "/hacking#web",
+      "Forensics": "/hacking#forensics",
+    },
+  },
+];
+---
+
+<section id="tutorial" class="py-20 px-4">
+  <div class="max-w-4xl mx-auto">
+    <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 text-purple-900">
+      Tutorial
+    </h2>
+    <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" role="list">
+      {tutorials.map((tutorial) => (
+        <li class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition border border-gray-100">
+          {tutorial.link ? (
+            <a href={tutorial.link} class="block">
+              <div class="text-4xl mb-3" aria-hidden="true">{tutorial.icon}</div>
+              <h3 class="text-xl font-bold mb-2 text-purple-800">{tutorial.title}</h3>
+              <p class="text-gray-600 text-sm mb-3">{tutorial.desc}</p>
+              <ul class="space-y-1">
+                {tutorial.topics.map((topic) => (
+                  <li class="text-purple-700 font-medium text-sm">
+                    {tutorial.topicLinks?.[topic] ? (
+                      <a href={tutorial.topicLinks[topic]} class="hover:underline">• {topic}</a>
+                    ) : (
+                      <>• {topic}</>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </a>
+          ) : (
+            <>
+              <div class="text-4xl mb-3" aria-hidden="true">{tutorial.icon}</div>
+              <h3 class="text-xl font-bold mb-2 text-purple-800">{tutorial.title}</h3>
+              <p class="text-gray-600 text-sm mb-3">{tutorial.desc}</p>
+              <ul class="space-y-1">
+                {tutorial.topics.map((topic) => (
+                  <li class="text-purple-700 font-medium text-sm">• {topic}</li>
+                ))}
+              </ul>
+            </>
+          )}
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>

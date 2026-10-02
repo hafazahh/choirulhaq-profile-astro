@@ -1,0 +1,241 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const topics = [
+  {
+    id: "dasar",
+    title: "Dasar Python",
+    icon: "🐍",
+    desc: "Variabel, tipe data, control flow, dan fungsi.",
+    latihan: [
+      {
+        soal: "Buat program yang meminta input nama dan menampilkan sapaan.",
+        contoh: `nama = input("Siapa nama kamu? ")\nprint(f"Halo, {nama}! Selamat belajar Python!")`,
+      },
+      {
+        soal: "Buat program kalkulator sederhana (tambah, kurang, kali, bagi).",
+        contoh: `a = float(input("Angka pertama: "))\nb = float(input("Angka kedua: "))\nprint(f"Hasil: {a + b}")`,
+      },
+      {
+        soal: "Buat program yang menentukan bilangan ganjil/genap.",
+        contoh: `n = int(input("Masukkan angka: "))\nprint("Genap" if n % 2 == 0 else "Ganjil")`,
+      },
+      {
+        soal: "Buat program yang menampilkan bilangan 1 sampai 100 dengan for loop.",
+        contoh: `for i in range(1, 101):\n    print(i)`,
+      },
+      {
+        soal: "Buat fungsi yang menghitung luas persegi panjang.",
+        contoh: `def luas(p, l):\n    return p * l\n\nprint(luas(5, 3))  # 15`,
+      },
+    ],
+  },
+  {
+    id: "oop",
+    title: "OOP",
+    icon: "☕",
+    desc: "Class, object, inheritance, dan encapsulation.",
+    latihan: [
+      {
+        soal: "Buat class `Mahasiswa` dengan atribut nama, nim, dan jurusan.",
+        contoh: `class Mahasiswa:\n    def __init__(self, nama, nim, jurusan):\n        self.nama = nama\n        self.nim = nim\n        self.jurusan = jurusan\n\nm = Mahasiswa("Choirul", "12345", "Teknik Informatika")\nprint(m.nama)`,
+      },
+      {
+        soal: "Buat class `Kalkulator` dengan method tambah, kurang, kali, bagi.",
+        contoh: `class Kalkulator:\n    def tambah(self, a, b):\n        return a + b\n    def kurang(self, a, b):\n        return a - b\n\nk = Kalkulator()\nprint(k.tambah(5, 3))  # 8`,
+      },
+      {
+        soal: "Buat inheritance: class `Hewan` dan class `Kucing` yang mewarisi `Hewan`.",
+        contoh: `class Hewan:\n    def __init__(self, nama):\n        self.nama = nama\n    def suara(self):\n        return "..."\n\nclass Kucing(Hewan):\n    def suara(self):\n        return "Meong!"\n\nk = Kucing("Kitty")\nprint(k.suara())  # Meong!`,
+      },
+      {
+        soal: "Buat encapsulation dengan private attribute dan getter/setter.",
+        contoh: `class Bank:\n    def __init__(self, saldo):\n        self.__saldo = saldo\n    def get_saldo(self):\n        return self.__saldo\n    def set_saldo(self, nilai):\n        if nilai >= 0:\n            self.__saldo = nilai`,
+      },
+      {
+        soal: "Buat class `Persegi` dengan method luas dan keliling.",
+        contoh: `class Persegi:\n    def __init__(self, sisi):\n        self.sisi = sisi\n    def luas(self):\n        return self.sisi ** 2\n    def keliling(self):\n        return 4 * self.sisi`,
+      },
+    ],
+  },
+  {
+    id: "web",
+    title: "Web Framework",
+    icon: "🌐",
+    desc: "Flask dan FastAPI untuk membuat web application.",
+    latihan: [
+      {
+        soal: "Buat aplikasi Flask sederhana dengan route '/' yang menampilkan 'Hello World'.",
+        contoh: `from flask import Flask\napp = Flask(__name__)\n\n@app.route("/")\ndef home():\n    return "Hello World!"\n\nif __name__ == "__main__":\n    app.run(debug=True)`,
+      },
+      {
+        soal: "Buat route dengan parameter: `/user/<nama>` yang menampilkan 'Halo, {nama}!'.",
+        contoh: `@app.route("/user/<nama>")\ndef user(nama):\n    return f"Halo, {nama}!"`,
+      },
+      {
+        soal: "Buat API endpoint yang mengembalikan JSON dengan FastAPI.",
+        contoh: `from fastapi import FastAPI\napp = FastAPI()\n\n@app.get("/")\ndef read_root():\n    return {"message": "Hello World"}`,
+      },
+      {
+        soal: "Buat form input dengan Flask (GET dan POST).",
+        contoh: `@app.route("/login", methods=["GET", "POST"])\ndef login():\n    if request.method == "POST":\n        username = request.form["username"]\n        return f"Selamat datang, {username}!"\n    return render_template("login.html")`,
+      },
+      {
+        soal: "Buat template HTML dengan Jinja2 di Flask.",
+        contoh: `<h1>Selamat datang, {{ nama }}!</h1>\n{% if nama == "Admin" %}\n    <p>Anda adalah admin.</p>\n{% endif %}`,
+      },
+    ],
+  },
+  {
+    id: "data",
+    title: "Data Science",
+    icon: "📊",
+    desc: "Pandas, NumPy, dan visualisasi data.",
+    latihan: [
+      {
+        soal: "Buat DataFrame dari dictionary dengan Pandas.",
+        contoh: `import pandas as pd\ndata = {"Nama": ["Andi", "Budi", "Cici"], "Usia": [20, 21, 22]}\ndf = pd.DataFrame(data)\nprint(df)`,
+      },
+      {
+        soal: "Baca file CSV dan tampilkan 5 baris pertama.",
+        contoh: `df = pd.read_csv("data.csv")\nprint(df.head())`,
+      },
+      {
+        soal: "Hitung rata-rata, median, dan standar deviasi dari kolom numerik.",
+        contoh: `print(df["Usia"].mean())\nprint(df["Usia"].median())\nprint(df["Usia"].std())`,
+      },
+      {
+        soal: "Buat array NumPy dan operasi dasar (tambah, kali, dot product).",
+        contoh: `import numpy as np\na = np.array([1, 2, 3])\nb = np.array([4, 5, 6])\nprint(a + b)  # [5 7 9]\nprint(np.dot(a, b))  # 32`,
+      },
+      {
+        soal: "Buat visualisasi bar chart dengan Matplotlib.",
+        contoh: `import matplotlib.pyplot as plt\nplt.bar(["A", "B", "C"], [10, 20, 15])\nplt.title("Contoh Bar Chart")\nplt.show()`,
+      },
+    ],
+  },
+  {
+    id: "ml",
+    title: "Machine Learning",
+    icon: "🤖",
+    desc: "Regresi, klasifikasi, dan neural network dengan scikit-learn.",
+    latihan: [
+      {
+        soal: "Install scikit-learn dan buat dataset sederhana.",
+        contoh: `pip install scikit-learn\nfrom sklearn.datasets import make_classification\nX, y = make_classification(n_samples=100, n_features=4, n_classes=2)`,
+      },
+      {
+        soal: "Bagi data menjadi training dan testing set.",
+        contoh: `from sklearn.model_selection import train_test_split\nX_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)`,
+      },
+      {
+        soal: "Buat model Linear Regression dan prediksi.",
+        contoh: `from sklearn.linear_model import LinearRegression\nmodel = LinearRegression()\nmodel.fit(X_train, y_train)\npred = model.predict(X_test)`,
+      },
+      {
+        soal: "Evaluasi model dengan accuracy score.",
+        contoh: `from sklearn.metrics import accuracy_score\nprint(accuracy_score(y_test, pred))`,
+      },
+      {
+        soal: "Buat model K-Nearest Neighbors (KNN).",
+        contoh: `from sklearn.neighbors import KNeighborsClassifier\nknn = KNeighborsClassifier(n_neighbors=3)\nknn.fit(X_train, y_train)\nprint(knn.score(X_test, y_test))`,
+      },
+    ],
+  },
+];
+---
+
+<BaseLayout title="Tutorial Python - Choirul Haq">
+  <section class="py-20 px-4 bg-gradient-to-br from-purple-50 to-sky-50">
+    <div class="max-w-4xl mx-auto">
+      <h1 class="text-4xl md:text-5xl font-bold text-center mb-4 text-purple-900">
+        🐍 Tutorial Python
+      </h1>
+      <p class="text-center text-gray-600 mb-12 text-lg">
+        Belajar Python dari dasar hingga data science dengan latihan interaktif.
+      </p>
+
+      <div class="bg-white rounded-xl shadow-lg p-8 mb-12">
+        <h2 class="text-2xl font-bold text-purple-800 mb-4">📦 Instalasi Python</h2>
+
+        <div class="grid md:grid-cols-3 gap-6 mb-8">
+          <div class="bg-purple-50 rounded-lg p-4">
+            <h3 class="font-bold text-purple-900 mb-2">Windows</h3>
+            <ol class="text-sm text-gray-700 space-y-1 list-decimal list-inside">
+              <li>Download dari <a href="https://python.org" target="_blank" rel="noopener" class="text-purple-700 underline">python.org</a></li>
+              <li>Jalankan installer</li>
+              <li>Centang "Add Python to PATH"</li>
+              <li>Klik "Install Now"</li>
+            </ol>
+          </div>
+          <div class="bg-purple-50 rounded-lg p-4">
+            <h3 class="font-bold text-purple-900 mb-2">Linux</h3>
+            <pre class="bg-gray-900 text-green-400 p-3 rounded text-xs overflow-x-auto"><code>sudo apt update
+sudo apt install python3 python3-pip</code></pre>
+          </div>
+          <div class="bg-purple-50 rounded-lg p-4">
+            <h3 class="font-bold text-purple-900 mb-2">macOS</h3>
+            <pre class="bg-gray-900 text-green-400 p-3 rounded text-xs overflow-x-auto"><code>brew install python3</code></pre>
+            <p class="text-xs text-gray-500 mt-2">Install Homebrew dulu jika belum: <a href="https://brew.sh" target="_blank" rel="noopener" class="text-purple-700 underline">brew.sh</a></p>
+          </div>
+        </div>
+
+        <div class="bg-purple-50 rounded-lg p-4 mb-6">
+          <h3 class="font-bold text-purple-900 mb-2">📓 Instalasi Jupyter Notebook</h3>
+          <pre class="bg-gray-900 text-green-400 p-3 rounded text-xs overflow-x-auto"><code>pip install jupyterlab
+jupyter lab</code></pre>
+          <p class="text-sm text-gray-600 mt-2">Atau dengan conda: <code class="bg-gray-200 px-1 rounded">conda install jupyterlab</code></p>
+        </div>
+
+        <div class="bg-purple-50 rounded-lg p-4">
+          <h3 class="font-bold text-purple-900 mb-2">▶️ Menjalankan Program Python</h3>
+          <div class="space-y-2 text-sm text-gray-700">
+            <p><strong>1. File Python (.py):</strong></p>
+            <pre class="bg-gray-900 text-green-400 p-3 rounded text-xs overflow-x-auto"><code>python hello.py</code></pre>
+            <p><strong>2. Interactive mode:</strong></p>
+            <pre class="bg-gray-900 text-green-400 p-3 rounded text-xs overflow-x-auto"><code>python
+>>> print("Hello, World!")</code></pre>
+            <p><strong>3. Jupyter Notebook:</strong></p>
+            <pre class="bg-gray-900 text-green-400 p-3 rounded text-xs overflow-x-auto"><code>jupyter lab</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="space-y-12">
+        {
+          topics.map((topic) => (
+            <div id={topic.id} class="bg-white rounded-xl shadow-lg p-8">
+              <div class="flex items-center gap-4 mb-4">
+                <span class="text-4xl">{topic.icon}</span>
+                <div>
+                  <h2 class="text-2xl font-bold text-purple-800">{topic.title}</h2>
+                  <p class="text-gray-600">{topic.desc}</p>
+                </div>
+              </div>
+
+              <div class="space-y-6">
+                {topic.latihan.map((lat, i) => (
+                  <div class="bg-purple-50 rounded-lg p-4">
+                    <h3 class="font-semibold text-purple-900 mb-2">
+                      Latihan {i + 1}: {lat.soal}
+                    </h3>
+                    <pre class="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto text-sm"><code>{lat.contoh}</code></pre>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))
+        }
+      </div>
+
+      <div class="mt-12 text-center">
+        <a
+          href="/"
+          class="inline-block bg-purple-700 text-white px-8 py-3 rounded-lg font-semibold hover:bg-purple-800 transition"
+        >
+          ← Kembali ke Profil
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

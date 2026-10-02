@@ -1,0 +1,167 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const topics = [
+  {
+    id: "cisco",
+    title: "Cisco Packet Tracer",
+    icon: "🌐",
+    desc: "Simulasi jaringan dengan Cisco Packet Tracer.",
+    latihan: [
+      {
+        soal: "Buat topologi jaringan sederhana: 2 PC + 1 Switch.",
+        contoh: `1. Buka Cisco Packet Tracer\n2. Drag 2 PC dan 1 Switch\n3. Hubungkan dengan straight-through cable\n4. Set IP address di setiap PC`,
+      },
+      {
+        soal: "Konfigurasi IP address di PC.",
+        contoh: `PC0: 192.168.1.10/24\nPC1: 192.168.1.11/24\n\nCommand: ipconfig 192.168.1.10 255.255.255.0`,
+      },
+      {
+        soal: "Test konektivitas dengan ping.",
+        contoh: `ping 192.168.1.11\n\nReply from 192.168.1.11: bytes=32 time<1ms TTL=128`,
+      },
+      {
+        soal: "Tambahkan Router dan konfigurasi routing.",
+        contoh: `Router> enable\nRouter# configure terminal\nRouter(config)# interface gigabitEthernet 0/0\nRouter(config-if)# ip address 192.168.1.1 255.255.255.0\nRouter(config-if)# no shutdown`,
+      },
+      {
+        soal: "Konfigurasi VLAN di Switch.",
+        contoh: `Switch> enable\nSwitch# vlan database\nSwitch(vlan)# vlan 10 name Sales\nSwitch(vlan)# vlan 20 name Engineering\nSwitch(vlan)# exit`,
+      },
+    ],
+  },
+  {
+    id: "pnetlab",
+    title: "PNETLab",
+    icon: "🖥️",
+    desc: "Simulasi jaringan dengan PNETLab (Platform Network Lab).",
+    latihan: [
+      {
+        soal: "Install PNETLab di VirtualBox atau VMware.",
+        contoh: `1. Download PNETLab dari https://pnetlab.com\n2. Import OVA ke VirtualBox/VMware\n3. Start VM dan login dengan credentials default`,
+      },
+      {
+        soal: "Buat lab dengan router dan switch.",
+        contoh: `1. Login ke PNETLab web interface\n2. Klik "Add Node"\n3. Pilih router (vIOS) dan switch (vIOS-L2)\n4. Hubungkan nodes dengan drag & drop`,
+      },
+      {
+        soal: "Konfigurasi router di PNETLab.",
+        contoh: `Router> enable\nRouter# configure terminal\nRouter(config)# hostname R1\nRouter(config)# interface gigabitEthernet 0/0\nRouter(config-if)# ip address 10.0.0.1 255.255.255.0\nRouter(config-if)# no shutdown`,
+      },
+      {
+        soal: "Konfigurasi OSPF routing.",
+        contoh: `Router(config)# router ospf 1\nRouter(config-router)# network 10.0.0.0 0.0.0.255 area 0\nRouter(config-router)# network 192.168.1.0 0.0.0.255 area 0`,
+      },
+      {
+        soal: "Test konektivitas antar router.",
+        contoh: `ping 10.0.0.2\nshow ip route\nshow ip ospf neighbor`,
+      },
+    ],
+  },
+  {
+    id: "routing",
+    title: "Routing & Switching",
+    icon: "🔀",
+    desc: "Static routing, dynamic routing, dan VLAN.",
+    latihan: [
+      {
+        soal: "Konfigurasi static route.",
+        contoh: `Router(config)# ip route 192.168.2.0 255.255.255.0 10.0.0.2`,
+      },
+      {
+        soal: "Konfigurasi RIP routing.",
+        contoh: `Router(config)# router rip\nRouter(config-router)# version 2\nRouter(config-router)# network 192.168.1.0\nRouter(config-router)# network 10.0.0.0`,
+      },
+      {
+        soal: "Konfigurasi OSPF routing.",
+        contoh: `Router(config)# router ospf 1\nRouter(config-router)# network 10.0.0.0 0.0.0.255 area 0`,
+      },
+      {
+        soal: "Konfigurasi VLAN dan trunking.",
+        contoh: `Switch(config)# vlan 10\nSwitch(config-vlan)# name Sales\nSwitch(config)# interface fa0/1\nSwitch(config-if)# switchport mode access\nSwitch(config-if)# switchport access vlan 10`,
+      },
+      {
+        soal: "Konfigurasi inter-VLAN routing.",
+        contoh: `Router(config)# interface gigabitEthernet 0/0.10\nRouter(config-subif)# encapsulation dot1Q 10\nRouter(config-subif)# ip address 192.168.10.1 255.255.255.0`,
+      },
+    ],
+  },
+  {
+    id: "security",
+    title: "Network Security",
+    icon: "🔒",
+    desc: "Keamanan jaringan: ACL, firewall, dan VPN.",
+    latihan: [
+      {
+        soal: "Buat Access Control List (ACL).",
+        contoh: `Router(config)# access-list 1 permit 192.168.1.0 0.0.0.255\nRouter(config)# access-list 1 deny any\nRouter(config)# interface gigabitEthernet 0/0\nRouter(config-if)# ip access-group 1 in`,
+      },
+      {
+        soal: "Konfigurasi NAT (Network Address Translation).",
+        contoh: `Router(config)# ip nat inside source list 1 interface gigabitEthernet 0/0 overload\nRouter(config)# access-list 1 permit 192.168.1.0 0.0.0.255`,
+      },
+      {
+        soal: "Konfigurasi SSH di router.",
+        contoh: `Router(config)# hostname R1\nRouter(config)# ip domain-name example.com\nRouter(config)# crypto key generate rsa\nRouter(config)# line vty 0 4\nRouter(config-line)# transport input ssh`,
+      },
+      {
+        soal: "Konfigurasi VPN site-to-site.",
+        contoh: `Router(config)# crypto isakmp policy 1\nRouter(config-isakmp)# encryption aes\nRouter(config-isakmp)# hash sha\nRouter(config-isakmp)# authentication pre-share`,
+      },
+      {
+        soal: "Konfigurasi firewall dasar.",
+        contoh: `Router(config)# ip inspect name FW tcp\nRouter(config)# ip inspect name FW udp\nRouter(config)# interface gigabitEthernet 0/0\nRouter(config-if)# ip inspect FW in`,
+      },
+    ],
+  },
+];
+---
+
+<BaseLayout title="Tutorial Networking - Choirul Haq">
+  <section class="py-20 px-4 bg-gradient-to-br from-purple-50 to-sky-50">
+    <div class="max-w-4xl mx-auto">
+      <h1 class="text-4xl md:text-5xl font-bold text-center mb-4 text-purple-900">
+        🌐 Tutorial Networking
+      </h1>
+      <p class="text-center text-gray-600 mb-12 text-lg">
+        Belajar jaringan komputer dengan Cisco Packet Tracer dan PNETLab.
+      </p>
+
+      <div class="space-y-12">
+        {
+          topics.map((topic) => (
+            <div id={topic.id} class="bg-white rounded-xl shadow-lg p-8">
+              <div class="flex items-center gap-4 mb-4">
+                <span class="text-4xl">{topic.icon}</span>
+                <div>
+                  <h2 class="text-2xl font-bold text-purple-800">{topic.title}</h2>
+                  <p class="text-gray-600">{topic.desc}</p>
+                </div>
+              </div>
+
+              <div class="space-y-6">
+                {topic.latihan.map((lat, i) => (
+                  <div class="bg-purple-50 rounded-lg p-4">
+                    <h3 class="font-semibold text-purple-900 mb-2">
+                      Latihan {i + 1}: {lat.soal}
+                    </h3>
+                    <pre class="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto text-sm"><code>{lat.contoh}</code></pre>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))
+        }
+      </div>
+
+      <div class="mt-12 text-center">
+        <a
+          href="/"
+          class="inline-block bg-purple-700 text-white px-8 py-3 rounded-lg font-semibold hover:bg-purple-800 transition"
+        >
+          ← Kembali ke Profil
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
