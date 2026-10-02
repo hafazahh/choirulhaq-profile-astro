@@ -148,19 +148,19 @@ const topics = [
 <BaseLayout title="Tutorial Python - Choirul Haq">
   <section class="py-20 px-4 bg-gradient-to-br from-purple-50 to-sky-50">
     <div class="max-w-4xl mx-auto">
-      <h1 class="text-4xl md:text-5xl font-bold text-center mb-4 text-purple-900">
+      <h1 class="text-4xl md:text-5xl font-bold text-center mb-4 text-purple-900" data-i18n="python.title">
         🐍 Tutorial Python
       </h1>
-      <p class="text-center text-gray-600 mb-12 text-lg">
+      <p class="text-center text-gray-600 mb-12 text-lg" data-i18n="python.subtitle">
         Belajar Python dari dasar hingga data science dengan latihan interaktif.
       </p>
 
       <div class="bg-white rounded-xl shadow-lg p-8 mb-12">
-        <h2 class="text-2xl font-bold text-purple-800 mb-4">📦 Instalasi Python</h2>
+        <h2 class="text-2xl font-bold text-purple-800 mb-4" data-i18n="python.install.title">📦 Instalasi Python</h2>
 
         <div class="grid md:grid-cols-3 gap-6 mb-8">
           <div class="bg-purple-50 rounded-lg p-4">
-            <h3 class="font-bold text-purple-900 mb-2">Windows</h3>
+            <h3 class="font-bold text-purple-900 mb-2" data-i18n="python.install.windows">Windows</h3>
             <ol class="text-sm text-gray-700 space-y-1 list-decimal list-inside">
               <li>Download dari <a href="https://python.org" target="_blank" rel="noopener" class="text-purple-700 underline">python.org</a></li>
               <li>Jalankan installer</li>
@@ -169,33 +169,33 @@ const topics = [
             </ol>
           </div>
           <div class="bg-purple-50 rounded-lg p-4">
-            <h3 class="font-bold text-purple-900 mb-2">Linux</h3>
+            <h3 class="font-bold text-purple-900 mb-2" data-i18n="python.install.linux">Linux</h3>
             <pre class="bg-gray-900 text-green-400 p-3 rounded text-xs overflow-x-auto"><code>sudo apt update
 sudo apt install python3 python3-pip</code></pre>
           </div>
           <div class="bg-purple-50 rounded-lg p-4">
-            <h3 class="font-bold text-purple-900 mb-2">macOS</h3>
+            <h3 class="font-bold text-purple-900 mb-2" data-i18n="python.install.macos">macOS</h3>
             <pre class="bg-gray-900 text-green-400 p-3 rounded text-xs overflow-x-auto"><code>brew install python3</code></pre>
             <p class="text-xs text-gray-500 mt-2">Install Homebrew dulu jika belum: <a href="https://brew.sh" target="_blank" rel="noopener" class="text-purple-700 underline">brew.sh</a></p>
           </div>
         </div>
 
         <div class="bg-purple-50 rounded-lg p-4 mb-6">
-          <h3 class="font-bold text-purple-900 mb-2">📓 Instalasi Jupyter Notebook</h3>
+          <h3 class="font-bold text-purple-900 mb-2" data-i18n="python.install.jupyter">📓 Instalasi Jupyter Notebook</h3>
           <pre class="bg-gray-900 text-green-400 p-3 rounded text-xs overflow-x-auto"><code>pip install jupyterlab
 jupyter lab</code></pre>
-          <p class="text-sm text-gray-600 mt-2">Atau dengan conda: <code class="bg-gray-200 px-1 rounded">conda install jupyterlab</code></p>
+          <p class="text-sm text-gray-600 mt-2" data-i18n="python.install.jupyter.atau">Atau dengan conda: <code class="bg-gray-200 px-1 rounded">conda install jupyterlab</code></p>
         </div>
 
         <div class="bg-purple-50 rounded-lg p-4">
-          <h3 class="font-bold text-purple-900 mb-2">▶️ Menjalankan Program Python</h3>
+          <h3 class="font-bold text-purple-900 mb-2" data-i18n="python.run.title">▶️ Menjalankan Program Python</h3>
           <div class="space-y-2 text-sm text-gray-700">
-            <p><strong>1. File Python (.py):</strong></p>
+            <p data-i18n="python.run.file"><strong>1. File Python (.py):</strong></p>
             <pre class="bg-gray-900 text-green-400 p-3 rounded text-xs overflow-x-auto"><code>python hello.py</code></pre>
-            <p><strong>2. Interactive mode:</strong></p>
+            <p data-i18n="python.run.interactive"><strong>2. Interactive mode:</strong></p>
             <pre class="bg-gray-900 text-green-400 p-3 rounded text-xs overflow-x-auto"><code>python
 >>> print("Hello, World!")</code></pre>
-            <p><strong>3. Jupyter Notebook:</strong></p>
+            <p data-i18n="python.run.jupyter"><strong>3. Jupyter Notebook:</strong></p>
             <pre class="bg-gray-900 text-green-400 p-3 rounded text-xs overflow-x-auto"><code>jupyter lab</code></pre>
           </div>
         </div>
@@ -208,15 +208,15 @@ jupyter lab</code></pre>
               <div class="flex items-center gap-4 mb-4">
                 <span class="text-4xl">{topic.icon}</span>
                 <div>
-                  <h2 class="text-2xl font-bold text-purple-800">{topic.title}</h2>
-                  <p class="text-gray-600">{topic.desc}</p>
+                  <h2 class="text-2xl font-bold text-purple-800" data-i18n={`python.${topic.id}.title`}>{topic.title}</h2>
+                  <p class="text-gray-600" data-i18n={`python.${topic.id}.desc`}>{topic.desc}</p>
                 </div>
               </div>
 
               <div class="space-y-6">
                 {topic.latihan.map((lat, i) => (
                   <div class="bg-purple-50 rounded-lg p-4">
-                    <h3 class="font-semibold text-purple-900 mb-2">
+                    <h3 class="font-semibold text-purple-900 mb-2" data-i18n={`python.${topic.id}.soal.${i + 1}`}>
                       Latihan {i + 1}: {lat.soal}
                     </h3>
                     <pre class="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto text-sm"><code>{lat.contoh}</code></pre>
@@ -232,6 +232,7 @@ jupyter lab</code></pre>
         <a
           href="/"
           class="inline-block bg-purple-700 text-white px-8 py-3 rounded-lg font-semibold hover:bg-purple-800 transition"
+          data-i18n="footer.backToHome"
         >
           ← Kembali ke Profil
         </a>
