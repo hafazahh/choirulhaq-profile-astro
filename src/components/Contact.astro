@@ -1,10 +1,13 @@
 ---
+import { getLangFromUrl, t, type Lang } from "../i18n";
+
+const lang: Lang = getLangFromUrl(Astro.url);
 ---
 
 <section id="kontak" class="py-20 px-4 bg-gradient-to-br from-purple-100 via-pink-100 to-sky-100">
   <div class="max-w-2xl mx-auto">
     <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 text-purple-900">
-      Hubungi Saya
+      {t(lang, "contact.title")}
     </h2>
     <div class="flex justify-center gap-6 mt-8">
       <a

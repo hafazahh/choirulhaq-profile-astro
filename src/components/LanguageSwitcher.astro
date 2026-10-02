@@ -1,0 +1,30 @@
+---
+import { getLangFromUrl, type Lang } from "../i18n";
+
+const lang: Lang = getLangFromUrl(Astro.url);
+---
+
+<div class="fixed top-4 right-4 z-50 flex gap-2">
+  <a
+    href={`?lang=id`}
+    class={`flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-medium shadow-md transition ${
+      lang === "id"
+        ? "bg-purple-700 text-white"
+        : "bg-white text-purple-700 hover:bg-purple-50"
+    }`}
+  >
+    <span class="text-base">🇮🇩</span>
+    <span>ID</span>
+  </a>
+  <a
+    href={`?lang=en`}
+    class={`flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-medium shadow-md transition ${
+      lang === "en"
+        ? "bg-purple-700 text-white"
+        : "bg-white text-purple-700 hover:bg-purple-50"
+    }`}
+  >
+    <span class="text-base">🇺🇸</span>
+    <span>EN</span>
+  </a>
+</div>
