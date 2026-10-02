@@ -132,7 +132,7 @@
     document.documentElement.lang = lang;
     document.querySelectorAll("[data-lang-btn]").forEach((btn) => {
       const isActive = btn.getAttribute("data-lang-btn") === lang;
-      btn.className = `lang-btn flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-medium shadow-md transition ${
+      btn.className = `lang-btn cursor-pointer flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-medium shadow-md transition ${
         isActive
           ? "bg-purple-700 text-white"
           : "bg-white text-purple-700 hover:bg-purple-50"
