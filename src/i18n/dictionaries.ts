@@ -69,7 +69,7 @@ export const dictionaries = {
     "miniproject.title": "Mini Project",
     "miniproject.view": "View Project",
     "miniproject.crudTestopencode.title": "CRUD Testopencode",
-    "miniproject.crudTestopencode.desc": "Aplikasi web CRUD Item dengan Python (Flask) + SQLite + Auth System + Role-Based Access Control. Fitur: login/logout, user management, role management dengan permission checkboxes, CRUD items/kategori/pelanggan, auto-deploy ke Render + Cloudflare.",
+    "miniproject.crudTestopencode.desc": "A web-based CRUD Item application built with Python (Flask) + SQLite + Auth System + Role-Based Access Control. Features: login/logout, user management, role management with permission checkboxes, CRUD items/customers/categories, auto-deploy to Render + Cloudflare.",
     "contact.title": "Contact Me",
     "footer.backToHome": "← Back to Profile",
   },
