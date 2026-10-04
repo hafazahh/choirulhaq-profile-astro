@@ -13,7 +13,6 @@ const miniProjects: MiniProject[] = [
     descKey: "miniproject.crudTestopencode.desc",
     techStack: ["Python", "Flask", "SQLite", "Jinja2", "Render", "Cloudflare"],
     link: "https://crud.choirulhaq.com",
-    image: "/favicon.svg",
   },
 ];
 ---
@@ -28,16 +27,9 @@ const miniProjects: MiniProject[] = [
         <li
           class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition border border-gray-100 flex flex-col"
         >
-          {project.image && (
-            <div class="w-16 h-16 mb-4 rounded-lg overflow-hidden flex-shrink-0">
-              <img
-                src={project.image}
-                alt=""
-                class="w-full h-full object-cover"
-                loading="lazy"
-              />
-            </div>
-          )}
+          <div class="w-16 h-16 mb-4 rounded-lg bg-indigo-600 flex items-center justify-center flex-shrink-0">
+            <span class="text-white font-bold text-lg">CRUD</span>
+          </div>
           <h3 class="text-xl font-bold mb-2 text-purple-800" data-i18n={project.titleKey}>
             {project.titleKey}
           </h3>
