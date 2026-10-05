@@ -4,7 +4,10 @@ interface MiniProject {
   descKey: string;
   techStack: string[];
   link: string;
-  image?: string;
+  badge: string;
+  badgeColor: string;
+  fallbackTitle: string;
+  fallbackDesc: string;
 }
 
 const miniProjects: MiniProject[] = [
@@ -13,6 +16,22 @@ const miniProjects: MiniProject[] = [
     descKey: "miniproject.crudTestopencode.desc",
     techStack: ["Python", "Flask", "SQLite", "Jinja2", "Render", "Cloudflare"],
     link: "https://crud.choirulhaq.com",
+    badge: "CRUD",
+    badgeColor: "bg-indigo-600",
+    fallbackTitle: "CRUD Testopencode",
+    fallbackDesc:
+      "Aplikasi web CRUD Item dengan Python (Flask) + SQLite + Auth System + Role-Based Access Control. Fitur: login/logout, user management, role management dengan permission checkboxes, CRUD items/kategori/pelanggan, auto-deploy ke Render + Cloudflare.",
+  },
+  {
+    titleKey: "miniproject.computerVision.title",
+    descKey: "miniproject.computerVision.desc",
+    techStack: ["Python", "Streamlit", "OpenCV", "EasyOCR", "PyTorch", "Cloudflare"],
+    link: "https://vision.choirulhaq.com",
+    badge: "CV",
+    badgeColor: "bg-purple-600",
+    fallbackTitle: "Computer Vision — ANPR",
+    fallbackDesc:
+      "Pemanfaatan teknologi AI untuk pengenalan objek: implementasi pengenalan nomor plat kendaraan (ANPR) yang dapat diintegrasikan dengan data member, sistem pembayaran, dan kontrol akses berbasis AI.",
   },
 ];
 ---
@@ -27,14 +46,14 @@ const miniProjects: MiniProject[] = [
         <li
           class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition border border-gray-100 flex flex-col"
         >
-          <div class="w-16 h-16 mb-4 rounded-lg bg-indigo-600 flex items-center justify-center flex-shrink-0">
-            <span class="text-white font-bold text-lg">CRUD</span>
+          <div class={`w-16 h-16 mb-4 rounded-lg ${project.badgeColor} flex items-center justify-center flex-shrink-0`}>
+            <span class="text-white font-bold text-lg">{project.badge}</span>
           </div>
           <h3 class="text-xl font-bold mb-2 text-purple-800" data-i18n={project.titleKey}>
-            CRUD Testopencode
+            {project.fallbackTitle}
           </h3>
           <p class="text-gray-600 text-sm mb-4 flex-1" data-i18n={project.descKey}>
-            Aplikasi web CRUD Item dengan Python (Flask) + SQLite + Auth System + Role-Based Access Control. Fitur: login/logout, user management, role management dengan permission checkboxes, CRUD items/kategori/pelanggan, auto-deploy ke Render + Cloudflare.
+            {project.fallbackDesc}
           </p>
           <div class="flex flex-wrap gap-2 mb-4">
             {project.techStack.map((tech) => (
