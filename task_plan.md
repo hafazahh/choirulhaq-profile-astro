@@ -1,32 +1,37 @@
-# Task Plan: Link Kartu Python Tutorial ke /python#dasar
+# Task Plan — SEO & i18n Polish choirulhaq.com
 
 ## Goal
-Menambahkan link dari kartu "Python" di section Tutorial (Projects.astro) ke halaman `/python#dasar` (Dasar Python).
+Terapkan 5 rekomendasi prioritas SEO/i18n di site Astro choirulhaq.com.
 
-## Current State
-- `Projects.astro` memiliki array `tutorials` dengan 5 kartu (Python, Java, SQL Server, Networking, Hacking)
-- Kartu Python saat ini TIDAK memiliki link
-- `python.astro` sudah memiliki section dengan `id="dasar"` (Dasar Python)
-- `index.astro` mengimpor dan menampilkan komponen `Projects`
+## Phases
 
-## Implementation Plan
+### Phase 1: Canonical URL [complete]
+- Update `site` di astro.config.mjs → `https://choirulhaq.com`
+- BaseLayout.astro sudah pakai `Astro.site` untuk canonical, jadi fix ini otomatis propagasi.
 
-### Phase 1: Tambah properti link di data tutorial
-**File:** `src/components/Projects.astro`
-- Tambahkan properti `link: "/python#dasar"` pada objek tutorial Python di array `tutorials`
+### Phase 2: i18n Placeholder Tutorial [complete]
+- Tambah key `python.*`, `networking.*`, `java.*`, `sqlserver.*`, `hacking.*` ke dictionaries.ts (id + en)
+- Key yang hilang: title, subtitle, install.title, install.windows/linux/macos/jupyter, run.title, run.file/interactive/jupyter, {topic}.title/desc/soal.{n}
 
-### Phase 2: Bungkus konten kartu dengan anchor
-**File:** `src/components/Projects.astro`
-- Bungkus konten kartu Python dengan `<a href={tutorial.link}>` agar seluruh kartu bisa diklik
-- Atau tambahkan link eksplisit di dalam kartu (misal: "Mulai Belajar →")
+### Phase 3: Meta Description [complete]
+- Update default description di BaseLayout.astro
+- Tambah prop description di halaman tutorial
 
-### Phase 3: Verifikasi
-- Pastikan anchor `#dasar` sudah ada di `python.astro` (sudah ada: `id="dasar"`)
-- Test bahwa link berfungsi dengan benar
+### Phase 4: Narasi Edukatif Tutorial [complete]
+- Tambah penjelasan naratif di python.astro (dan halaman tutorial lain)
+- Bukan hanya latihan — tambah konteks "kenapa" dan "bagaimana"
 
-## Files to Modify
-- `src/components/Projects.astro` — tambah link di kartu Python
+### Phase 5: sitemap.xml + robots.txt [complete]
+- Buat public/sitemap.xml
+- Buat public/robots.txt
 
-## Files to Verify (read-only)
-- `src/pages/python.astro` — pastikan `id="dasar"` sudah ada
-- `src/pages/index.astro` — pastikan Projects diimpor dengan benar
+## Verification Results (2026-10-14)
+- `npm run build` sukses, 6 halaman ter-generate
+- Canonical URL: `https://choirulhaq.com/` dan `https://choirulhaq.com/python/` ✓
+- Meta description: "Profil Choirul Haq — Tech Enthusiast, tutorial Python/Networking, dan project AI/Ekonomi Indonesia" ✓
+- sitemap.xml (882B) + robots.txt (68B) ter-copy ke dist/ ✓
+- Narasi edukatif ter-render di HTML ("bahasa pemrograman serbaguna", "Object-Oriented Programming") ✓
+
+## Errors
+| Error | Attempt | Resolution |
+|-------|---------|------------|

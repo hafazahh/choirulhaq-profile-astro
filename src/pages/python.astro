@@ -155,6 +155,15 @@ const topics = [
         Belajar Python dari dasar hingga data science dengan latihan interaktif.
       </p>
 
+      <div class="max-w-3xl mx-auto mb-12 text-gray-700 space-y-4">
+        <p>
+          Python adalah bahasa pemrograman serbaguna yang mudah dibaca dan ditulis. Dengan sintaksis yang bersih, Python menjadi titik awal yang tepat bagi siapa pun yang ingin memasuki dunia pemrograman — dari pengembangan web hingga kecerdasan buatan.
+        </p>
+        <p>
+          Tutorial ini membawa Anda dari konsep fundamental seperti variabel dan fungsi, hingga topik lanjutan seperti <em>Object-Oriented Programming</em>, pengembangan web dengan Flask, dan machine learning dengan scikit-learn. Setiap bagian dilengkapi latihan praktis yang bisa Anda coba sendiri.
+        </p>
+      </div>
+
       <div class="bg-white rounded-xl shadow-lg p-8 mb-12">
         <h2 class="text-2xl font-bold text-purple-800 mb-4" data-i18n="python.install.title">📦 Instalasi Python</h2>
 
@@ -213,6 +222,13 @@ jupyter lab</code></pre>
                 </div>
               </div>
 
+              <p class="text-gray-600 mb-6 text-sm leading-relaxed">
+                {topic.id === "dasar" && "Variabel adalah wadah untuk menyimpan data. Python mengenal berbagai tipe data seperti integer, float, string, dan boolean. Control flow (if/else, for, while) mengatur alur program, sedangkan fungsi mengelompokkan kode agar reusable."}
+                {topic.id === "oop" && "Object-Oriented Programming (OOP) adalah paradigma yang mengorganisasi kode ke dalam class dan object. Konsep utama: encapsulation (menyembunyikan detail internal), inheritance (mewarisi sifat dari class lain), dan polymorphism (satu interface, banyak implementasi)."}
+                {topic.id === "web" && "Flask adalah web framework ringan yang cepat untuk memulai. FastAPI adalah framework modern dengan validasi otomatis dan performa tinggi. Keduanya memungkinkan Anda membangun REST API dengan Python."}
+                {topic.id === "data" && "Pandas menyediakan DataFrame untuk manipulasi data terstruktur. NumPy untuk operasi numerik efisien pada array. Matplotlib untuk visualisasi data — semua tools esensial untuk data science."}
+                {topic.id === "ml" && "Machine learning memungkinkan komputer belajar dari data tanpa eksplisit diprogram. scikit-learn menyediakan algoritma klasik seperti regresi, klasifikasi, dan clustering dengan API yang konsisten dan mudah digunakan."}
+              </p>
               <div class="space-y-6">
                 {topic.latihan.map((lat, i) => (
                   <div class="bg-purple-50 rounded-lg p-4">
