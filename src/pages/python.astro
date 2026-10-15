@@ -7,6 +7,7 @@ const topics = [
     title: "Dasar Python",
     icon: "🐍",
     desc: "Variabel, tipe data, control flow, dan fungsi.",
+    descLong: "Variabel adalah wadah untuk menyimpan data. Python mengenal berbagai tipe data seperti integer, float, string, dan boolean. Control flow (if/else, for, while) mengatur alur program, sedangkan fungsi mengelompokkan kode agar reusable.",
     latihan: [
       {
         soal: "Buat program yang meminta input nama dan menampilkan sapaan.",
@@ -35,6 +36,7 @@ const topics = [
     title: "OOP",
     icon: "☕",
     desc: "Class, object, inheritance, dan encapsulation.",
+    descLong: "Object-Oriented Programming (OOP) adalah paradigma yang mengorganisasi kode ke dalam class dan object. Konsep utama: encapsulation (menyembunyikan detail internal), inheritance (mewarisi sifat dari class lain), dan polymorphism (satu interface, banyak implementasi).",
     latihan: [
       {
         soal: "Buat class `Mahasiswa` dengan atribut nama, nim, dan jurusan.",
@@ -63,6 +65,7 @@ const topics = [
     title: "Web Framework",
     icon: "🌐",
     desc: "Flask dan FastAPI untuk membuat web application.",
+    descLong: "Flask adalah web framework ringan yang cepat untuk memulai. FastAPI adalah framework modern dengan validasi otomatis dan performa tinggi. Keduanya memungkinkan kamu membangun REST API dengan Python.",
     latihan: [
       {
         soal: "Buat aplikasi Flask sederhana dengan route '/' yang menampilkan 'Hello World'.",
@@ -82,7 +85,7 @@ const topics = [
       },
       {
         soal: "Buat template HTML dengan Jinja2 di Flask.",
-        contoh: `<h1>Selamat datang, {{ nama }}!</h1>\n{% if nama == "Admin" %}\n    <p>Anda adalah admin.</p>\n{% endif %}`,
+        contoh: `<h1>Selamat datang, {{ nama }}!</h1>\n{% if nama == "Admin" %}\n    <p>Kamu adalah admin.</p>\n{% endif %}`,
       },
     ],
   },
@@ -91,6 +94,7 @@ const topics = [
     title: "Data Science",
     icon: "📊",
     desc: "Pandas, NumPy, dan visualisasi data.",
+    descLong: "Pandas menyediakan DataFrame untuk manipulasi data terstruktur. NumPy untuk operasi numerik efisien pada array. Matplotlib untuk visualisasi data — semua tools esensial untuk data science.",
     latihan: [
       {
         soal: "Buat DataFrame dari dictionary dengan Pandas.",
@@ -119,6 +123,7 @@ const topics = [
     title: "Machine Learning",
     icon: "🤖",
     desc: "Regresi, klasifikasi, dan neural network dengan scikit-learn.",
+    descLong: "Machine learning memungkinkan komputer belajar dari data tanpa eksplisit diprogram. scikit-learn menyediakan algoritma klasik seperti regresi, klasifikasi, dan clustering dengan API yang konsisten dan mudah digunakan.",
     latihan: [
       {
         soal: "Install scikit-learn dan buat dataset sederhana.",
@@ -156,11 +161,11 @@ const topics = [
       </p>
 
       <div class="max-w-3xl mx-auto mb-12 text-gray-700 space-y-4">
-        <p>
+        <p data-i18n="python.intro.p1">
           Python adalah bahasa pemrograman serbaguna yang mudah dibaca dan ditulis. Dengan sintaksis yang bersih, Python menjadi titik awal yang tepat bagi siapa pun yang ingin memasuki dunia pemrograman — dari pengembangan web hingga kecerdasan buatan.
         </p>
         <p>
-          Tutorial ini membawa Anda dari konsep fundamental seperti variabel dan fungsi, hingga topik lanjutan seperti <em>Object-Oriented Programming</em>, pengembangan web dengan Flask, dan machine learning dengan scikit-learn. Setiap bagian dilengkapi latihan praktis yang bisa Anda coba sendiri.
+          <span data-i18n="python.intro.p2a">Tutorial ini membawa kamu dari konsep fundamental seperti variabel dan fungsi, hingga topik lanjutan seperti </span><em>Object-Oriented Programming</em><span data-i18n="python.intro.p2b">, pengembangan web dengan Flask, dan machine learning dengan scikit-learn. Setiap bagian dilengkapi latihan praktis yang bisa kamu coba sendiri.</span>
         </p>
       </div>
 
@@ -222,12 +227,8 @@ jupyter lab</code></pre>
                 </div>
               </div>
 
-              <p class="text-gray-600 mb-6 text-sm leading-relaxed">
-                {topic.id === "dasar" && "Variabel adalah wadah untuk menyimpan data. Python mengenal berbagai tipe data seperti integer, float, string, dan boolean. Control flow (if/else, for, while) mengatur alur program, sedangkan fungsi mengelompokkan kode agar reusable."}
-                {topic.id === "oop" && "Object-Oriented Programming (OOP) adalah paradigma yang mengorganisasi kode ke dalam class dan object. Konsep utama: encapsulation (menyembunyikan detail internal), inheritance (mewarisi sifat dari class lain), dan polymorphism (satu interface, banyak implementasi)."}
-                {topic.id === "web" && "Flask adalah web framework ringan yang cepat untuk memulai. FastAPI adalah framework modern dengan validasi otomatis dan performa tinggi. Keduanya memungkinkan Anda membangun REST API dengan Python."}
-                {topic.id === "data" && "Pandas menyediakan DataFrame untuk manipulasi data terstruktur. NumPy untuk operasi numerik efisien pada array. Matplotlib untuk visualisasi data — semua tools esensial untuk data science."}
-                {topic.id === "ml" && "Machine learning memungkinkan komputer belajar dari data tanpa eksplisit diprogram. scikit-learn menyediakan algoritma klasik seperti regresi, klasifikasi, dan clustering dengan API yang konsisten dan mudah digunakan."}
+              <p class="text-gray-600 mb-6 text-sm leading-relaxed" data-i18n={`python.${topic.id}.descLong`}>
+                {topic.descLong}
               </p>
               <div class="space-y-6">
                 {topic.latihan.map((lat, i) => (
