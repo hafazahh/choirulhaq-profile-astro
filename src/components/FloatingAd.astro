@@ -55,7 +55,13 @@
   src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8947827620334788"
   crossorigin="anonymous"
 ></script>
-<script src="/floating-ad.js" defer></script>
+<!-- v2: the old /floating-ad.js path was served by Cloudflare as immutable
+     max-age=31536000 (observed age 4270s, cf-cache-status HIT), so no edit to
+     that URL could ever reach a returning visitor. A new filename is a new
+     cache object at the edge and needs no purge. Drop the -v2 suffix and go
+     back to the plain name once the fixed cache rules in public/_headers have
+     been live long enough for the edge to have revalidated it. -->
+<script src="/floating-ad-v2.js" defer></script>
 
 <style>
   /* Fixed above the footer, offset by the safe-area inset so a gesture bar
