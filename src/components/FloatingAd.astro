@@ -1,0 +1,120 @@
+---
+/**
+ * FloatingAd — sticky anchor ad bar for choirulhaq.com
+ *
+ * Placement rules it follows, and why each exists:
+ *
+ *  - Appears only after the user scrolls past 35% of the page. A bar that is
+ *    already open on arrival is exactly what AdSense's disruptive-ads
+ *    guidance describes ("unexpected full screen interstitials when the user
+ *    chose to do something else"). Waiting for a scroll makes it a response
+ *    to reading, not an obstacle to starting.
+ *  - Close button is real: dismissing sets sessionStorage so the bar stays
+ *    gone for the whole session on this origin, not just until the next
+ *    navigation. A "close" that comes back on the next page click is the
+ *    standard dark pattern, and AdSense policy text explicitly names close
+ *    buttons that do not work as a violation.
+ *  - The bar reserves its own height with a CSS variable so the page's last
+ *    line is never covered.
+ *
+ * No <script> here on purpose. This site's CSP is `script-src 'self'` with no
+ * 'unsafe-inline' — the single setting that holds the A+ grade — and Astro
+ * emits a component-local script as an INLINE module (verified against
+ * dist/index.html), which that policy blocks. The behaviour therefore lives in
+ * public/floating-ad.js, loaded below through the same-origin origin it needs.
+ */
+---
+
+<div
+  id="floating-ad"
+  class="floating-ad"
+  hidden
+  aria-label="Iklan"
+  role="complementary"
+>
+  <ins
+    class="adsbygoogle floating-ad__slot"
+    style="display:block"
+    data-ad-client="ca-pub-8947827620334788"
+    data-ad-slot="auto"
+    data-ad-format="horizontal"
+    data-full-width-responsive="true"></ins>
+  <button
+    id="floating-ad-close"
+    class="floating-ad__close"
+    type="button"
+    aria-label="Tutup iklan"
+    title="Tutup iklan"
+  >
+    &times;
+  </button>
+</div>
+
+<script
+  async
+  src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8947827620334788"
+  crossorigin="anonymous"
+></script>
+<script src="/floating-ad.js" defer></script>
+
+<style>
+  /* Fixed above the footer, offset by the safe-area inset so a gesture bar
+     never sits on top of the close button. */
+  .floating-ad {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 60;
+    padding: 6px 40px 6px 8px;
+    padding-bottom: max(6px, env(safe-area-inset-bottom));
+    background: rgba(12, 10, 24, 0.96);
+    border-top: 1px solid rgba(196, 181, 253, 0.35);
+    box-shadow: 0 -6px 24px rgba(0, 0, 0, 0.35);
+    transition: transform 0.25s ease, opacity 0.25s ease;
+    transform: translateY(100%);
+    opacity: 0;
+  }
+
+  .floating-ad[data-visible="true"] {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  /* The page's last line must stay readable with the bar open. */
+  body[data-floating-ad-open="true"] {
+    padding-bottom: var(--floating-ad-h, 64px);
+  }
+
+  .floating-ad__slot {
+    min-height: 44px;
+  }
+
+  .floating-ad__close {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: #d6cffa;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .floating-ad__close:hover {
+    background: rgba(196, 181, 253, 0.18);
+    color: #fff;
+  }
+
+  .floating-ad__close:focus-visible {
+    outline: 2px solid #a78bfa;
+    outline-offset: 1px;
+  }
+</style>

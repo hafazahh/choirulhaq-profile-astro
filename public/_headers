@@ -2,7 +2,17 @@
   X-Frame-Options: DENY
   X-Content-Type-Options: nosniff
   Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
-  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://ui-avatars.com; font-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; object-src 'none'; form-action 'self'
+  # CSP for the floating anchor ad (AdSense). Astro keeps every inline script
+  # hoisted into /_astro/*.js, so 'self' alone is still enough for the site —
+  # these additions are only the origins the ad itself needs:
+  #   script-src: pagead2 (loader), tpc.googlesyndication (ad delivery),
+  #               partner.googleadservices + googletagservices (creatives)
+  #   img-src   : ad images and tracking pixels are not same-origin
+  #   frame-src : some formats render in an iframe (denied when omitted)
+  #   connect-src: ad measurement and verification calls
+  # frame-ancestors stays 'none' — that direction frames the PAGE out, and is
+  # unrelated to the ad's own child iframe, which is frame-src.
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://pagead2.googlesyndication.com https://tpc.googlesyndication.com https://partner.googleadservices.com https://www.googletagservices.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://ui-avatars.com https://pagead2.googlesyndication.com https://tpc.googlesyndication.com https://www.google.com https://googleusercontent.com; font-src 'self' data:; connect-src 'self' https://pagead2.googlesyndication.com https://tpc.googlesyndication.com; frame-src https://googleads.g.doubleclick.net https://tpc.googlesyndication.com; frame-ancestors 'none'; base-uri 'self'; object-src 'none'; form-action 'self'
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
   Cross-Origin-Opener-Policy: same-origin
