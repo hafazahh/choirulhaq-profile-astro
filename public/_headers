@@ -1,22 +1,38 @@
+# Security headers for choirulhaq.com (Cloudflare Pages).
+#
+# Rules learned here the hard way — the grade on this site went A+ to D when a
+# single block failed to parse, so keep the shape of this file stable:
+#
+#   1. One block per URL pattern. This file uses exactly ONE `/*` block.
+#      Two blocks matching `/*` merged unpredictably and the security headers
+#      in the first one were silently dropped (observed live: HTML served only
+#      x-content-type-options + referrer-policy, no CSP/HSTS/X-Frame-Options).
+#   2. NO comment lines inside a header block. Comments live between blocks,
+#      at column 0, as the Cloudflare docs example shows them. A `#` line
+#      indented inside a block is what preceded the D-grade incident.
+#   3. Cache-Control belongs in this same block, not in a second `/*` block.
+#
+# CSP notes: the floating anchor ad loads Google AdSense, which needs its own
+# origins. Without these the ad slot renders empty and the console reports a
+# CSP violation — ads silently fail rather than render.
+#   script-src : pagead2 (loader) + tpc.googlesyndicate (ad delivery) +
+#                partner.googleadservices + googletagservices (creatives).
+#   img-src    : ad images and tracking pixels are not same-origin.
+#   frame-src  : some ad formats render inside an iframe, so this must list
+#                the ad hosts rather than being omitted.
+#   connect-src: ad measurement / verification calls.
+# frame-ancestors stays 'none' — that direction controls who may frame THIS
+# page, which is unrelated to the ad's own child iframe (frame-src).
 /*
   X-Frame-Options: DENY
   X-Content-Type-Options: nosniff
   Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
-  # CSP for the floating anchor ad (AdSense). Astro keeps every inline script
-  # hoisted into /_astro/*.js, so 'self' alone is still enough for the site —
-  # these additions are only the origins the ad itself needs:
-  #   script-src: pagead2 (loader), tpc.googlesyndicate (ad delivery),
-  #               partner.googleadservices + googletagservices (creatives)
-  #   img-src   : ad images and tracking pixels are not same-origin
-  #   frame-src : some formats render inside an iframe (denied when omitted)
-  #   connect-src: ad measurement and verification calls
-  # frame-ancestors stays 'none' — that direction frames the PAGE out, and is
-  # unrelated to the ad's own child iframe, which is frame-src.
   Content-Security-Policy: default-src 'self'; script-src 'self' https://pagead2.googlesyndication.com https://tpc.googlesyndication.com https://partner.googleadservices.com https://www.googletagservices.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://ui-avatars.com https://pagead2.googlesyndication.com https://tpc.googlesyndication.com https://www.google.com https://googleusercontent.com; font-src 'self' data:; connect-src 'self' https://pagead2.googlesyndication.com https://tpc.googlesyndication.com; frame-src https://googleads.g.doubleclick.net https://tpc.googlesyndication.com; frame-ancestors 'none'; base-uri 'self'; object-src 'none'; form-action 'self'
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
   Cross-Origin-Opener-Policy: same-origin
   Cross-Origin-Resource-Policy: same-origin
+  Cache-Control: public, max-age=3600
 
 # Astro fingerprints the filenames it builds into /_astro/, so those URLs
 # change whenever the content does and can be cached forever. That is the
@@ -40,18 +56,14 @@
 /*.webmanifest
   Cache-Control: public, max-age=3600
 
-# Files served from a STABLE path — floating-ad.js is the one that motivated
-# this — must be revalidated rather than cached for a year. `immutable` on a
-# stable path means an edit stays invisible to every visitor who already
-# loaded it (observed: age 3434s against a 31536000s max-age), and a reload
-# cannot fix that. no-cache keeps the fast path — the edge still answers 304 —
-# while guaranteeing a fresh copy is eventually seen.
+# Files served from a STABLE path must be revalidated rather than cached for a
+# year. `immutable` on a stable path means an edit stays invisible to every
+# visitor who already loaded it (observed: age 4270s against a 31536000s
+# max-age, cf-cache-status HIT), and a reload cannot fix that. A max-age of
+# 3600 keeps the fast path — the edge still answers 304 — while guaranteeing a
+# fresh copy is eventually seen.
 /*.js
   Cache-Control: public, max-age=3600
 
 /*.css
-  Cache-Control: public, max-age=3600
-
-# HTML is what tells the browser which JS to load, so it must never go stale.
-/*
   Cache-Control: public, max-age=3600
