@@ -1,0 +1,158 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+/**
+ * Landing page Python: index tree artikel, bukan hub intro statis.
+ *
+ * Halaman ini berubah sendiri setiap kali artikel baru ditambahkan ke
+ * src/content/artikel/, (folder markdown artikel, bukan URL) jadi tidak ada pekerjaan manual saat artikel bertambah.
+ */
+
+const semua = (await getCollection("artikel")).sort(
+  (a, b) => b.data.tanggal.getTime() - a.data.tanggal.getTime()
+);
+
+/** Urutan tema: dasar dulu, lanjutan kemudian. */
+const URUTAN_TEMA = ["Dasar Python", "Fungsi & Modul", "OOP", "File & Error", "Data Science"];
+
+const perTema = new Map<string, typeof semua>();
+for (const entry of semua) {
+  const daftar = perTema.get(entry.data.tema) ?? [];
+  daftar.push(entry);
+  perTema.set(entry.data.tema, daftar);
+}
+
+/** Tema di frontmatter yang belum masuk daftar urutan tetap tampil, di belakang. */
+const temaTerpakai = [
+  ...URUTAN_TEMA.filter((t) => perTema.has(t)),
+  ...[...perTema.keys()].filter((t) => !URUTAN_TEMA.includes(t)),
+];
+
+const totalMenit = semua.reduce((jumlah, entry) => jumlah + (entry.data.durasiBaca ?? 0), 0);
+---
+
+<BaseLayout
+  title="Artikel & Tutorial — Choirul Haq"
+  description="Kumpulan artikel pemrograman dan teknologi berbahasa Indonesia: Python, jaringan, dan basis data. Setiap contoh kode dijalankan lebih dulu sebelum dipublikasikan."
+>
+  <!-- CPE: konsisten dengan gaya visual halaman tutorial lain (ungu + latar lembut) -->
+  <section class="py-16 px-4 bg-gradient-to-br from-purple-50 to-sky-50">
+    <div class="max-w-4xl mx-auto">
+      <nav aria-label="Breadcrumb" class="mb-6 text-sm text-gray-500">
+        <ol class="flex items-center gap-1">
+          <li><a href="/" class="hover:text-purple-700 hover:underline">Beranda</a></li>
+          <li aria-hidden="true">/</li>
+          <li><span class="text-gray-700 font-medium">Artikel</span></li>
+        </ol>
+      </nav>
+
+      <header class="text-center mb-12">
+        <div class="text-5xl mb-3" aria-hidden="true">📚</div>
+        <h1 class="text-4xl md:text-5xl font-bold text-purple-900 mb-3">Artikel & Tutorial</h1>
+        <p class="text-lg text-gray-600 max-w-2xl mx-auto mb-6">
+          Artikel panjang berbahasa Indonesia, dikelompokkan per tema agar bisa dibaca berurutan. Setiap
+          contoh kode dijalankan lebih dulu, jadi output yang ditampilkan adalah keluaran sungguhan.
+        </p>
+        <div class="inline-flex flex-wrap justify-center gap-x-5 gap-y-2 text-sm text-gray-600">
+          <span class="px-3 py-1 bg-white rounded-full border border-purple-200">
+            <strong class="text-purple-800">{semua.length}</strong> artikel
+          </span>
+          <span class="px-3 py-1 bg-white rounded-full border border-purple-200">
+            <strong class="text-purple-800">{temaTerpakai.length}</strong> tema
+          </span>
+          <span class="px-3 py-1 bg-white rounded-full border border-purple-200">
+            ± <strong class="text-purple-800">{totalMenit}</strong> menit baca
+          </span>
+        </div>
+      </header>
+
+      {
+        semua.length === 0 && (
+          <p class="text-center text-gray-600">Belum ada artikel. Tambahkan berkas .md di folder src/content/artikel/.</p>
+        )
+      }
+
+      <!-- Tautan ke halaman tutorial lama: masih berisi instalasi, mode
+           interaktif, dan latihan singkat per topik. Keduanya berdampingan;
+           keputusan isi halaman lama menyusul. -->
+      <section class="bg-white rounded-2xl shadow-sm border border-purple-100 p-6 mb-8">
+        <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+          <div class="text-3xl shrink-0" aria-hidden="true">🐍</div>
+          <div class="flex-1">
+            <h2 class="text-lg font-bold text-purple-800 mb-1">Baru mulai dari nol?</h2>
+            <p class="text-sm text-gray-600">
+              Halaman <a href="/python/" class="text-purple-700 underline">Tutorial Python</a> memuat
+              cara memasang Python, menjalankan program, Jupyter Notebook, serta latihan singkat per
+              topik.
+            </p>
+          </div>
+          <a
+            href="/python/"
+            class="shrink-0 inline-block text-center bg-purple-700 text-white px-5 py-2 rounded-lg text-sm font-semibold hover:bg-purple-800 transition"
+            >Buka tutorial →</a
+          >
+        </div>
+      </section>
+
+      <!-- Index tree: artikel dikelompokkan per tema -->
+      <div class="space-y-8">
+        {
+          temaTerpakai.map((tema) => {
+            const entries = perTema.get(tema)!;
+            return (
+              <section class="bg-white rounded-2xl shadow-sm border border-purple-100 overflow-hidden">
+                <div class="bg-purple-50/60 px-6 py-4 border-b border-purple-100">
+                  <h2 class="text-xl font-bold text-purple-800">{tema}</h2>
+                  <p class="text-sm text-gray-500 mt-0.5">
+                    {entries.length} artikel
+                    {totalMenit > 0 && ` · ${entries.reduce((n, e) => n + (e.data.durasiBaca ?? 0), 0)} menit`}
+                  </p>
+                </div>
+                <ul class="divide-y divide-purple-50">
+                  {entries.map((entry) => (
+                    <li>
+                      <a
+                        href={`/artikel/${entry.id}/`}
+                        class="block px-6 py-4 hover:bg-purple-50/50 transition group"
+                      >
+                        <div class="flex items-start justify-between gap-4">
+                          <div class="flex-1">
+                            <h3 class="font-semibold text-gray-900 group-hover:text-purple-800 transition mb-1">
+                              {entry.data.judul}
+                            </h3>
+                            <p class="text-sm text-gray-600 leading-relaxed">{entry.data.ringkasan}</p>
+                            <p class="text-xs text-gray-400 mt-2">
+                              {entry.data.tanggal.toLocaleDateString("id-ID", {
+                                day: "numeric",
+                                month: "short",
+                                year: "numeric",
+                              })}
+                              {entry.data.durasiBaca && ` · ${entry.data.durasiBaca} menit`}
+                            </p>
+                          </div>
+                          <span class="text-purple-600 group-hover:translate-x-1 transition-transform mt-1 shrink-0" aria-hidden="true">
+                            →
+                          </span>
+                        </div>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            );
+          })
+        }
+      </div>
+
+      <div class="mt-12 text-center">
+        <p class="text-sm text-gray-500">
+          Ada saran topik atau koreksi? Kirim ke
+          <a href="mailto:me@choirulhaq.com" class="text-purple-700 underline hover:text-purple-900"
+            >me@choirulhaq.com</a
+          >.
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

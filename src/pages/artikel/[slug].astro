@@ -1,0 +1,140 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import MarkdownArtikel from "../../components/MarkdownArtikel.astro";
+
+export async function getStaticPaths() {
+  const artikel = await getCollection("artikel");
+  return artikel.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { judul, tema, ringkasan, tanggal, penulis, diverifikasi, durasiBaca } = entry.data;
+
+const tanggalISO = tanggal.toISOString();
+const tanggalTampil = tanggal.toLocaleDateString("id-ID", {
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+});
+
+const { Content, headings } = await render(entry);
+
+const isi = entry.body ?? "";
+const jumlahKata = isi.split(/\s+/).filter(Boolean).length;
+
+/** Schema Article untuk hasil kaya Google — bagian dari E-E-A-T yang dituntut AdSense. */
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: judul,
+  description: ringkasan,
+  datePublished: tanggalISO,
+  dateModified: tanggalISO,
+  author: { "@type": "Person", name: penulis },
+  publisher: {
+    "@type": "Organization",
+    name: "Choirul Haq",
+    url: "https://choirulhaq.com",
+  },
+  mainEntityOfPage: {
+    "@type": "WebPage",
+    "@id": `https://choirulhaq.com/artikel/${entry.id}/`,
+  },
+  inLanguage: "id-ID",
+  wordCount: jumlahKata,
+};
+
+const breadcrumb = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Beranda", item: "https://choirulhaq.com/" },
+    { "@type": "ListItem", position: 2, name: "Artikel", item: "https://choirulhaq.com/artikel/" },
+    {
+      "@type": "ListItem",
+      position: 3,
+      name: judul,
+      item: `https://choirulhaq.com/artikel/${entry.id}/`,
+    },
+  ],
+};
+---
+
+<BaseLayout title={`${judul} - Choirul Haq`} description={ringkasan}>
+  <article class="py-16 px-4">
+    <div class="max-w-3xl mx-auto">
+      <!-- breadcrumb: navigasi jelas untuk pembaca dan penanda struktur untuk Google -->
+      <nav aria-label="Breadcrumb" class="mb-6 text-sm text-gray-500">
+        <ol class="flex flex-wrap items-center gap-1">
+          <li><a href="/" class="hover:text-purple-700 hover:underline">Beranda</a></li>
+          <li aria-hidden="true">/</li>
+          <li><a href="/artikel/" class="hover:text-purple-700 hover:underline">Artikel</a></li>
+          <li aria-hidden="true">/</li>
+          <li><span class="text-gray-700 font-medium">{tema}</span></li>
+        </ol>
+      </nav>
+
+      <header class="mb-8">
+        <a
+          href="/artikel/"
+          class="inline-block mb-4 text-sm font-semibold text-purple-700 hover:text-purple-900"
+        >
+          ← Semua artikel
+        </a>
+        <p class="text-sm font-semibold text-purple-600 uppercase tracking-wide mb-2">{tema}</p>
+        <h1 class="text-3xl md:text-4xl font-bold text-purple-900 mb-4 leading-tight">{judul}</h1>
+        <p class="text-lg text-gray-600 mb-4">{ringkasan}</p>
+        <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-gray-500 border-t border-b border-purple-100 py-3">
+          <span class="font-medium text-gray-700">Oleh {penulis}</span>
+          <span aria-hidden="true">•</span>
+          <time datetime={tanggalISO}>{tanggalTampil}</time>
+          {
+            durasiBaca && (
+              <>
+                <span aria-hidden="true">•</span>
+                        <span>{durasiBaca} menit baca</span>
+                      </>
+                    )
+          }
+          {
+            diverifikasi && (
+              <>
+                <span aria-hidden="true">•</span>
+                        <span title="Versi Python tempat semua contoh kode di artikel ini dijalankan"
+                  >Diverifikasi pada Python {diverifikasi.replace("Python ", "")}</span
+                >
+                      </>
+                    )
+          }
+        </div>
+      </header>
+
+      <div class="bg-white rounded-2xl shadow-sm border border-purple-100 p-6 md:p-9">
+        <MarkdownArtikel headings={headings}>
+          <Content />
+        </MarkdownArtikel>
+      </div>
+
+      <footer class="mt-10 pt-6 border-t border-purple-100">
+        <p class="text-sm text-gray-600 mb-4">
+          Artikel bagian dari seri <strong class="text-purple-800">Tutorial Python</strong>. Tiap
+          contoh kode dijalankan lebih dulu sebelum ditulis, sehingga output yang ditampilkan adalah
+          keluaran sungguhan.
+        </p>
+        <a
+          href="/artikel/"
+          class="inline-block bg-purple-700 text-white px-6 py-2.5 rounded-lg font-semibold text-sm hover:bg-purple-800 transition"
+        >
+          Lihat artikel lain →
+        </a>
+      </footer>
+    </div>
+  </article>
+</BaseLayout>
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />
+<script type="application/ld+json" set:html={JSON.stringify(breadcrumb)} />

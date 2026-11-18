@@ -1,0 +1,185 @@
+---
+import type { MarkdownHeading } from "astro";
+
+/**
+ * Renderer markdown bernuansa dokumentasi untuk artikel tutorial.
+ *
+ * Aturan tampilan yang diterapkan di sini, bukan di CSS global, supaya gaya
+ * artikel tidak bergantung pada gaya halaman profil di sekitarnya:
+ *
+ *  - Blok `python` (atau bash) tampil sebagai blok kode gelap dengan baris
+ *    nomor opsional; teks dipilih ulang warna dari tema.
+ *  - Blok tanpa bahasa langsung mengikuti blok kode = BLOK OUTPUT. Itu yang
+ *    membuatnya perlu dibedakan: artikel tutorial ini selalu menaruh output
+ *    asli program setelah kodenya, dan output yang terlihat seperti kode
+ *    membingungkan pembaca pemula.
+ *  - Tabel diberi gaya rapi dengan scroll horizontal di ponsel.
+ *  - Judul di dalam artikel memakai warna tema, bukan abu-abu default.
+ */
+interface Props {
+  headings: MarkdownHeading[];
+}
+
+const { headings } = Astro.props;
+---
+
+<article class="artikel__isi">
+  <slot />
+</article>
+
+<style is:global>
+  /* ---------- teks ---------- */
+  .artikel__isi {
+    color: #374151;
+    font-size: 1.0625rem;
+    line-height: 1.75;
+  }
+  .artikel__isi > h2 {
+    margin-top: 2.5rem;
+    margin-bottom: 0.75rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #6b21a8;
+    letter-spacing: -0.01em;
+  }
+  .artikel__isi > h3 {
+    margin-top: 1.75rem;
+    margin-bottom: 0.5rem;
+    font-size: 1.1875rem;
+    font-weight: 600;
+    color: #7e22ce;
+  }
+  .artikel__isi p {
+    margin-bottom: 1.125rem;
+  }
+  .artikel__isi strong {
+    color: #1f2937;
+    font-weight: 600;
+  }
+  .artikel__isi a {
+    color: #7c3aed;
+    font-weight: 500;
+    text-decoration: underline;
+    text-decoration-color: rgba(124, 58, 237, 0.35);
+    text-underline-offset: 3px;
+  }
+  .artikel__isi a:hover {
+    text-decoration-color: #7c3aed;
+  }
+  .artikel__isi ul,
+  .artikel__isi ol {
+    margin: 0 0 1.125rem 0;
+    padding-left: 1.5rem;
+  }
+  .artikel__isi li {
+    margin-bottom: 0.375rem;
+  }
+  .artikel__isi ul {
+    list-style: disc;
+  }
+  .artikel__isi ol {
+    list-style: decimal;
+  }
+  .artikel__isi blockquote {
+    margin: 1.5rem 0;
+    padding: 0.75rem 1.125rem;
+    border-left: 4px solid #c4b5fd;
+    background: #faf5ff;
+    border-radius: 0 0.5rem 0.5rem 0;
+    color: #5b21b6;
+  }
+  .artikel__isi hr {
+    margin: 2rem 0;
+    border: 0;
+    border-top: 1px solid #e5e7eb;
+  }
+
+  /* ---------- kode ---------- */
+  .artikel__isi pre {
+    position: relative;
+    margin: 0 0 0.5rem 0;
+    padding: 0.875rem 1rem;
+    background: #1e1b2e;
+    color: #e2e8f0;
+    border-radius: 0.625rem;
+    overflow-x: auto;
+    font-size: 0.8125rem;
+    line-height: 1.65;
+    tab-size: 4;
+  }
+  .artikel__isi pre code {
+    background: transparent;
+    padding: 0;
+    border-radius: 0;
+    font-size: inherit;
+    color: inherit;
+    font-family: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+  }
+  .artikel__isi :not(pre) > code {
+    padding: 0.1rem 0.35rem;
+    background: #f3e8ff;
+    color: #6b21a8;
+    border-radius: 0.25rem;
+    font-size: 0.875em;
+    font-family: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+  }
+
+  /*
+   * Blok output (tanpa bahasa) mengikuti blok kode. Diberi label supaya
+   * pembaca pemula langsung paham bahwa itu hasil program, bukan kode lain.
+   *
+   * `!important` dipakai sengaja pada background/color/border: Tailwind v4
+   * mengimpor preflight di `@layer base` yang SETELAH style komponen ini
+   * masuk, dan keduanya memiliki specificity yang sama — tanpa peringatan
+   * itu aturan preflight menang dan blok output tampil gelap seperti kode
+   * (bug ini terlihat langsung di dev server karena border kiri sudah berubah
+   * tetapi latar tidak).
+   */
+  .artikel__isi pre + pre {
+    margin: 0 0 1.5rem 0;
+    background: #f8fafc !important;
+    color: #334155 !important;
+    border: 1px solid #e2e8f0 !important;
+    border-left: 3px solid #94a3b8 !important;
+  }
+  .artikel__isi pre + pre::before {
+    content: "OUTPUT";
+    display: block;
+    margin-bottom: 0.375rem;
+    font-size: 0.625rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: #94a3b8 !important;
+    font-family: ui-sans-serif, system-ui, sans-serif;
+  }
+  .artikel__isi pre + pre code {
+    color: #334155 !important;
+  }
+
+  /* ---------- tabel ---------- */
+  .artikel__isi table {
+    display: block;
+    width: 100%;
+    margin: 1.25rem 0 1.5rem 0;
+    overflow-x: auto;
+    border-collapse: collapse;
+    font-size: 0.9375rem;
+  }
+  .artikel__isi th {
+    background: #f5f3ff;
+    color: #5b21b6;
+    font-weight: 600;
+    text-align: left;
+    padding: 0.5rem 0.75rem;
+    border-bottom: 2px solid #ddd6fe;
+    white-space: nowrap;
+  }
+  .artikel__isi td {
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid #ede9fe;
+    vertical-align: top;
+  }
+  .artikel__isi tbody tr:hover {
+    background: #faf5ff;
+  }
+</style>
