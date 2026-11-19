@@ -1,7 +1,7 @@
 ---
 import { getCollection, render } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import SidebarTree from "../../components/SidebarTree.astro";
+import PythonSidebarPanel from "../../components/PythonSidebarPanel.astro";
 import MarkdownArtikel from "../../components/MarkdownArtikel.astro";
 import { sectionOfSlug, TREE } from "../../data/pythonTree";
 import PythonLayout from "../../components/PythonLayout.astro";
@@ -78,14 +78,8 @@ const labelMateri = cocok?.item.label ?? Astro.params.slug!;
             </header>
 
             <div class="py-layout">
-              <aside class="py-sidebar" aria-label="Indeks materi">
-                <div class="py-sidebar__head">
-                  <span class="py-sidebar__caption">Indeks Materi</span>
-                </div>
-                <div class="py-sidebar__scroll">
-                  <SidebarTree activeSlug={entry.id} activeSection={bagian?.id} />
-                </div>
-              </aside>
+              {/* Panel indeks + skrip buka/tutup, dipakai bersama dengan /python/ */}
+              <PythonSidebarPanel activeSlug={entry.id} activeSection={bagian?.id} />
 
               <main class="py-main">
                 <article class="py-article">
@@ -169,16 +163,10 @@ const labelMateri = cocok?.item.label ?? Astro.params.slug!;
         </header>
 
         <div class="py-layout">
-          <aside class="py-sidebar" aria-label="Indeks materi">
-            <div class="py-sidebar__head">
-              <span class="py-sidebar__caption">Indeks Materi</span>
-            </div>
-            <div class="py-sidebar__scroll">
-              <SidebarTree activeSlug={Astro.params.slug} activeSection={bagian?.id} />
-            </div>
-          </aside>
+            {/* Panel indeks + skrip buka/tutup, dipakai bersama dengan /python/ */}
+            <PythonSidebarPanel activeSlug={Astro.params.slug} activeSection={bagian?.id} />
 
-          <main class="py-main">
+            <main class="py-main">
             <article class="py-article">
               <p class="py-article__crumb">
                 <a href="/python/">Tutorial Python</a> › {cocok.section.label}

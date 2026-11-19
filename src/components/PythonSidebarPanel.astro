@@ -1,0 +1,82 @@
+---
+import SidebarTree from "./SidebarTree.astro";
+
+/**
+ * Panel indeks materi Tutorial Python: tombol pemicu, overlay, dan sidebar
+ * berisi tree.
+ *
+ * Dipisah menjadi komponen sendiri karena logika panel geser (buka/tutup/
+ * Escape) dibutuhkan oleh /python/ DAN /python/<slug>/. Kalau skripnya
+ * ditulis langsung di dalam halaman, ia harus diulang di setiap berkas, dan
+ * Astro hanya menaikkan (hoist) `<script>` yang berada di tingkat atas
+ * template — skrip di dalam fungsi bersarang (misalnya IIFE) tidak ikut
+ * dibundel dan tombolnya mati tanpa pesan error. Menaruhnya di komponen
+ * membuat skrip selalu di tingkat atas, jadi selalu terpasang.
+ *
+ * Di desktop sidebar selalu tampak; di layar <= 860px ia jadi panel geser
+ * dari kiri dengan tombol "☰ Indeks Materi" + overlay (lihat PythonLayout).
+ */
+
+interface Props {
+  activeSlug?: string;
+  activeSection?: string;
+}
+
+const { activeSlug, activeSection } = Astro.props;
+---
+
+<button
+  class="py-menu-btn"
+  id="pyMenuBtn"
+  type="button"
+  aria-label="Buka indeks materi"
+  aria-expanded="false"
+>
+  ☰ Indeks Materi
+</button>
+<div class="py-overlay" id="pyOverlay" hidden></div>
+
+<aside class="py-sidebar" id="pySidebar" aria-label="Indeks materi">
+  <div class="py-sidebar__head">
+    <span class="py-sidebar__caption">Indeks Materi</span>
+    <button class="py-sidebar__close" id="pyCloseBtn" type="button" aria-label="Tutup indeks">
+      ×
+    </button>
+  </div>
+  <div class="py-sidebar__scroll">
+    <SidebarTree activeSlug={activeSlug} activeSection={activeSection} />
+  </div>
+</aside>
+
+<script>
+  /*
+   * Panel indeks di layar sempit.
+   *
+   * Di desktop sidebar selalu tampil. Di ponsel, ia disembunyikan dan dibuka
+   * lewat tombol; memilih isi indeks harus menutup panel agar artikel
+   * terlihat, bukan tertutup panel yang terbuka.
+   */
+
+  const tombolMenu = document.getElementById("pyMenuBtn");
+  const tombolTutup = document.getElementById("pyCloseBtn");
+  const sidebar = document.getElementById("pySidebar");
+  const overlay = document.getElementById("pyOverlay");
+
+  function bukaPanel() {
+    sidebar?.classList.add("py-sidebar--open");
+    if (overlay) overlay.hidden = false;
+    tombolMenu?.setAttribute("aria-expanded", "true");
+  }
+  function tutupPanel() {
+    sidebar?.classList.remove("py-sidebar--open");
+    if (overlay) overlay.hidden = true;
+    tombolMenu?.setAttribute("aria-expanded", "false");
+  }
+
+  tombolMenu?.addEventListener("click", bukaPanel);
+  tombolTutup?.addEventListener("click", tutupPanel);
+  overlay?.addEventListener("click", tutupPanel);
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") tutupPanel();
+  });
+</script>

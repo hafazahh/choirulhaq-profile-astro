@@ -53,6 +53,7 @@ const { activeSlug, activeSection } = Astro.props;
                     ]}
                     {...(soon ? {} : { href: `#${item.slug}` })}
                     {...(soon ? { "aria-disabled": "true" } : {})}
+                    {...(isActive ? { "aria-current": "page" } : {})}
                   >
                     <span class="tree__label">{item.label}</span>
                     {badge && <span class={`badge badge--${item.kind}`}>{badge}</span>}
@@ -100,6 +101,13 @@ const { activeSlug, activeSection } = Astro.props;
     background: var(--py-accent-soft);
     color: var(--py-accent);
   }
+  /* Fokus keyboard harus terlihat di seluruh kontrol tree. */
+  .tree__toggle:focus-visible,
+  .tree__item:focus-visible {
+    outline: 2px solid var(--py-accent);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
 
   .tree__chevron {
     display: inline-block;
@@ -109,6 +117,17 @@ const { activeSlug, activeSection } = Astro.props;
   }
   .tree__section--open .tree__chevron {
     transform: rotate(90deg);
+  }
+
+  /*
+   * `.tree__list` memakai `display: flex` sendiri. Tanpa aturan ini, selektor
+   * kelas menang atas `[hidden]` bawaan UA stylesheet (specificity 0-1-0 vs
+   * 0-1-0, tapi aturan penulis selalu mengalahkan UA), sehingga atribut
+   * `hidden` dari server tidak pernah menyembunyikan daftar — semua bab
+   * selalu tampil dan klik judul bab tampak tidak berpengaruh.
+   */
+  .tree__list[hidden] {
+    display: none;
   }
 
   .tree__list {
@@ -192,8 +211,9 @@ const { activeSlug, activeSection } = Astro.props;
   @media (max-width: 860px) {
     .tree__item,
     .tree__toggle {
-      padding: 0.5rem 0.7rem;
+      padding: 0.7rem 0.7rem;
       font-size: 0.9rem;
+      min-height: 44px;
     }
     .badge {
       font-size: 0.6rem;

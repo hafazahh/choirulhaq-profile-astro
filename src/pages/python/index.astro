@@ -2,7 +2,7 @@
 import { getCollection } from "astro:content";
 import { render } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import SidebarTree from "../../components/SidebarTree.astro";
+import PythonSidebarPanel from "../../components/PythonSidebarPanel.astro";
 import MarkdownArtikel from "../../components/MarkdownArtikel.astro";
 import { TREE, sectionOfSlug } from "../../data/pythonTree";
 import PythonLayout from "../../components/PythonLayout.astro";
@@ -62,23 +62,10 @@ const totalMenit = entries.reduce((n, e) => n + (e.data.durasiBaca ?? 0), 0);
 
     <div class="py-layout">
       <!-- Sidebar desktop; di layar sempit menjadi panel geser dari kiri -->
-      <button class="py-menu-btn" id="pyMenuBtn" aria-label="Buka indeks materi" aria-expanded="false">
-        ☰ Indeks Materi
-      </button>
-      <div class="py-overlay" id="pyOverlay" hidden></div>
-
-      <aside class="py-sidebar" id="pySidebar" aria-label="Indeks materi">
-        <div class="py-sidebar__head">
-          <span class="py-sidebar__caption">Indeks Materi</span>
-          <button class="py-sidebar__close" id="pyCloseBtn" aria-label="Tutup indeks">×</button>
-        </div>
-        <div class="py-sidebar__scroll">
-          <SidebarTree
-            activeSlug={awal.id}
-            activeSection={bagian?.id ?? TREE[0].id}
-          />
-        </div>
-      </aside>
+      <PythonSidebarPanel
+        activeSlug={awal.id}
+        activeSection={bagian?.id ?? TREE[0].id}
+      />
 
       <main class="py-main">
         <article class="py-article">
@@ -142,40 +129,4 @@ const totalMenit = entries.reduce((n, e) => n + (e.data.durasiBaca ?? 0), 0);
       </main>
     </div>
   </div>
-
-  <script>
-    import { getCollection, render } from "astro:content";
-    import { TREE } from "../data/pythonTree";
-
-    /**
-     * Panel indeks di layar sempit.
-     *
-     * Di desktop sidebar selalu tampil. Di ponsel, ia disembunyikan dan dibuka
-     * lewat tombol; memilih isi indeks harus menutup panel agar artikel
-     * terlihat, bukan tertutup panel yang terbuka.
-     */
-
-    const tombolMenu = document.getElementById("pyMenuBtn");
-    const tombolTutup = document.getElementById("pyCloseBtn");
-    const sidebar = document.getElementById("pySidebar");
-    const overlay = document.getElementById("pyOverlay");
-
-    function bukaPanel() {
-      sidebar?.classList.add("py-sidebar--open");
-      if (overlay) overlay.hidden = false;
-      tombolMenu?.setAttribute("aria-expanded", "true");
-    }
-    function tutupPanel() {
-      sidebar?.classList.remove("py-sidebar--open");
-      if (overlay) overlay.hidden = true;
-      tombolMenu?.setAttribute("aria-expanded", "false");
-    }
-
-    tombolMenu?.addEventListener("click", bukaPanel);
-    tombolTutup?.addEventListener("click", tutupPanel);
-    overlay?.addEventListener("click", tutupPanel);
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") tutupPanel();
-    });
-  </script>
 </BaseLayout>

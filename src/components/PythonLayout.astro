@@ -3,16 +3,17 @@
  * Kerangka halaman Tutorial Python.
  *
  * Berisi CSS kerangka dua kolom (sidebar indeks + konten) yang dipakai
- * `/python/` dan `/python/<slug>/`. Sengaja berdiri sendiri dari tema ungu
- * situs lain: halaman tutorial butuh tampilan dokumen yang netral supaya nyaman
- * dibaca lama.
+ * `/python/` dan `/python/<slug>/`. Paletnya SENGAJA sama dengan beranda
+ * (tema ungu: purple-900/800/700, latar gradien ungu muda → biru muda, kartu
+ * putih rounded-xl + shadow-md) supaya pembaca yang pindah dari beranda ke
+ * tutorial merasa masih di situs yang sama.
  *
  * Breakpoint:
  *   >= 1024px : laptop — sidebar tetap terlihat
  *   861-1023px : iPad portrait — sidebar mengecil
  *   <= 860px  : ponsel — sidebar jadi panel geser dengan overlay
  *
- * Mode gelap otomatis mengikuti preferensi sistem.
+ * Mode gelap otomatis mengikuti preferensi sistem; aksennya tetap ungu.
  */
 ---
 
@@ -25,22 +26,38 @@
    * cakupan global tidak bertabrakan dengan gaya halaman lain.
    */
   .py-page {
-    --py-bg: #f5f7fa;
+    /*
+     * Palet disamakan dengan beranda (src/pages/index.astro) supaya
+     * /python/ terasa satu keluarga visual: aksen ungu Tailwind
+     * purple-700/purple-800, latar gradien ungu muda → biru muda
+     * (setara from-purple-50 to-sky-50), kartu putih rounded-xl.
+     */
+    --py-bg: linear-gradient(160deg, #faf5ff 0%, #f5f3ff 45%, #f0f9ff 100%);
+    --py-bg-solid: #faf5ff;
     --py-surface: #ffffff;
-    --py-text: #1a1a1a;
-    --py-text-secondary: #555555;
+    --py-text: #1f2937;
+    --py-text-secondary: #4b5563;
     --py-text-muted: #6b7280;
-    --py-accent: #2563eb;
-    --py-accent-soft: #eff6ff;
+    /* purple-700 #7e22ce · hover purple-800 #6b21a8 · judul purple-900 #581c87 */
+    --py-accent: #7e22ce;
+    --py-accent-hover: #6b21a8;
+    --py-title: #581c87;
+    --py-subtitle: #6b21a8;
+    --py-accent-soft: #faf5ff;
+    --py-accent-soft-strong: #f3e8ff;
     --py-border: #e5e7eb;
+    --py-card-border: #f3f4f6;
+    /* shadow-md Tailwind */
     --py-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    --py-shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
     --py-shadow-panel: 2px 0 12px rgba(0, 0, 0, 0.15);
-    --py-radius: 10px;
+    --py-radius: 12px;
     --py-sidebar-w: 300px;
     --py-header-h: 56px;
 
     min-height: 100vh;
-    background: var(--py-bg);
+    background: var(--py-bg) var(--py-bg-solid);
+    background-attachment: fixed;
     color: var(--py-text);
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   }
@@ -49,14 +66,22 @@
   @media (prefers-color-scheme: dark) {
     .py-page {
       --py-surface: #1f2937;
-      --py-bg: #111827;
+      --py-bg: linear-gradient(160deg, #18102b 0%, #150f26 45%, #0b1220 100%);
+      --py-bg-solid: #171024;
       --py-text: #f3f4f6;
-      --py-text-secondary: #9ca3af;
+      --py-text-secondary: #cbd5e1;
       --py-text-muted: #9ca3af;
-      --py-accent: #60a5fa;
-      --py-accent-soft: #1e3a5f;
-      --py-border: #374151;
+      /* Aksen tetap ungu di mode gelap (purple-400), bukan biru. */
+      --py-accent: #c084fc;
+      --py-accent-hover: #a855f7;
+      --py-title: #e9d5ff;
+      --py-subtitle: #d8b4fe;
+      --py-accent-soft: rgba(88, 28, 135, 0.35);
+      --py-accent-soft-strong: rgba(88, 28, 135, 0.55);
+      --py-border: #3b3a52;
+      --py-card-border: #2f2c44;
       --py-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+      --py-shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.45), 0 2px 4px -2px rgba(0, 0, 0, 0.4);
       --py-shadow-panel: 2px 0 16px rgba(0, 0, 0, 0.5);
     }
   }
@@ -67,9 +92,15 @@
     top: 0;
     z-index: 40;
     height: var(--py-header-h);
-    background: var(--py-surface);
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: saturate(180%) blur(8px);
     border-bottom: 1px solid var(--py-border);
     box-shadow: var(--py-shadow);
+  }
+  @media (prefers-color-scheme: dark) {
+    .py-header {
+      background: rgba(31, 41, 55, 0.92);
+    }
   }
   .py-header__inner {
     display: flex;
@@ -85,11 +116,11 @@
     text-decoration: none;
     font-size: 1.05rem;
     padding: 0.35rem 0.5rem;
-    border-radius: 6px;
+    border-radius: 8px;
     flex-shrink: 0;
   }
   .py-header__home:hover {
-    background: var(--py-accent-soft);
+    background: var(--py-accent-soft-strong);
     color: var(--py-accent);
   }
   .py-header__title {
@@ -106,6 +137,7 @@
     font-weight: 600;
     margin: 0;
     white-space: nowrap;
+    color: var(--py-title);
   }
   .py-header__meta {
     margin-left: auto;
@@ -120,11 +152,12 @@
     text-decoration: none;
     font-weight: 600;
     padding: 0.3rem 0.55rem;
-    border-radius: 6px;
+    border-radius: 8px;
     white-space: nowrap;
   }
   .py-header__back:hover {
-    background: var(--py-accent-soft);
+    background: var(--py-accent-soft-strong);
+    color: var(--py-accent-hover);
   }
 
   /* ---------- kerangka dua kolom ---------- */
@@ -146,6 +179,7 @@
     height: calc(100vh - var(--py-header-h));
     background: var(--py-surface);
     border-right: 1px solid var(--py-border);
+    box-shadow: 2px 0 10px rgba(88, 28, 135, 0.04);
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -154,15 +188,15 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0.85rem 1rem 0.5rem;
+    padding: 0.85rem 1rem 0.6rem;
     border-bottom: 1px solid var(--py-border);
   }
   .py-sidebar__caption {
     font-size: 0.7rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    color: var(--py-text-secondary);
-    font-weight: 600;
+    color: var(--py-subtitle);
+    font-weight: 700;
   }
   .py-sidebar__close {
     display: none;
@@ -173,10 +207,10 @@
     line-height: 1;
     cursor: pointer;
     padding: 0.15rem 0.4rem;
-    border-radius: 6px;
+    border-radius: 8px;
   }
   .py-sidebar__close:hover {
-    background: var(--py-accent-soft);
+    background: var(--py-accent-soft-strong);
     color: var(--py-accent);
   }
   .py-sidebar__scroll {
@@ -219,7 +253,8 @@
     font-size: 1.65rem;
     line-height: 1.3;
     margin: 0 0 0.5rem;
-    color: var(--py-text);
+    color: var(--py-title);
+    letter-spacing: -0.01em;
   }
   .py-article__ringkas {
     font-size: 1rem;
@@ -244,59 +279,142 @@
   }
 
   /*
-   * Judul artikel ditulis markdown dan memakai gaya `.artikel__isi` bersama
-   * (ungu). Di halaman tutorial ini paletnya netral-biru, jadi judul dan tautan
-   * di dalam isi artikel diselaraskan dengan kerangka halaman — dua palet dalam
-   * satu layar terbaca sebagai tidak konsisten.
+   * Judul artikel ditulis markdown dan memakai gaya `.artikel__isi` bersama.
+   * Gaya itu sudah ungu, tapi kerangka halaman ini dulu bertema biru sehingga
+   * warnanya ditimpa dengan aksen biru — itu yang membuat halaman tidak
+   * menyatu dengan beranda. Sekarang keduanya ungu, jadi penimpaan di sini
+   * dipakai untuk MENYELARASKAN, bukan mengalihkan: teks body gray-700,
+   * aksen dan blok statis ikut token ungu halaman ini.
    */
   .py-content .artikel__isi {
-    color: var(--py-text);
+    color: #374151;
   }
   .py-content .artikel__isi > h2 {
-    color: var(--py-text);
+    color: #6b21a8;
     border-bottom: 1px solid var(--py-border);
     padding-bottom: 0.35rem;
   }
   .py-content .artikel__isi > h3 {
-    color: var(--py-text);
+    color: #7e22ce;
   }
   .py-content .artikel__isi a {
     color: var(--py-accent);
     text-decoration-color: color-mix(in srgb, var(--py-accent) 35%, transparent);
   }
-  .py-content .artikel__isi :not(pre > code) {
-    background: var(--py-accent-soft);
-    color: var(--py-accent);
+  .py-content .artikel__isi :not(pre) > code {
+    background: #f3e8ff;
+    color: #6b21a8;
   }
   .py-content .artikel__isi blockquote {
-    border-left-color: var(--py-accent);
-    background: var(--py-accent-soft);
-    color: var(--py-text-secondary);
+    border-left-color: #c4b5fd;
+    background: #faf5ff;
+    color: #5b21b6;
   }
   .py-content .artikel__isi th {
-    background: var(--py-accent-soft);
-    color: var(--py-text);
-    border-bottom-color: var(--py-border);
+    background: #f5f3ff;
+    color: #5b21b6;
+    border-bottom-color: #ddd6fe;
   }
   .py-content .artikel__isi td {
-    border-bottom-color: var(--py-border);
+    border-bottom-color: #ede9fe;
   }
   .py-content .artikel__isi tbody tr:hover {
-    background: var(--py-accent-soft);
+    background: #faf5ff;
+  }
+  .py-content .artikel__isi tbody tr:hover td {
+    border-bottom-color: #ddd6fe;
+  }
+
+  /*
+   * `.artikel__isi` memakai warna tetap yang dikunci untuk mode terang. Di
+   * mode gelap itu tidak cukup kontras (body #374151 di atas #1f2937), jadi
+   * aturan di bawah menimpa nilainya dengan padanan terang yang bernuansa ungu.
+   * `!important` diperlukan: keduanya berbentuk satu-nilai tanpa layer, dan
+   * aturan komponen MarkdownArtikel masuk lebih awal.
+   */
+  @media (prefers-color-scheme: dark) {
+    .py-content .artikel__isi,
+    .py-content .artikel__isi strong {
+      color: #e5e7eb;
+    }
+    .py-content .artikel__isi > h2 {
+      color: var(--py-subtitle);
+    }
+    .py-content .artikel__isi > h3 {
+      color: var(--py-accent);
+    }
+    .py-content .artikel__isi a {
+      color: var(--py-accent);
+      text-decoration-color: rgba(192, 132, 252, 0.5);
+    }
+    .py-content .artikel__isi :not(pre) > code {
+      background: rgba(88, 28, 135, 0.45);
+      color: #e9d5ff;
+    }
+    .py-content .artikel__isi blockquote {
+      border-left-color: var(--py-accent);
+      background: rgba(88, 28, 135, 0.3);
+      color: var(--py-subtitle);
+    }
+    .py-content .artikel__isi hr {
+      border-top-color: var(--py-border);
+    }
+    .py-content .artikel__isi th {
+      background: rgba(88, 28, 135, 0.4);
+      color: var(--py-subtitle);
+      border-bottom-color: rgba(192, 132, 252, 0.35);
+    }
+    .py-content .artikel__isi td {
+      border-bottom-color: var(--py-border);
+    }
+    .py-content .artikel__isi tbody tr:hover {
+      background: rgba(88, 28, 135, 0.18);
+    }
+    .py-content .artikel__isi tbody tr:hover td {
+      border-bottom-color: rgba(192, 132, 252, 0.3);
+    }
+    .py-content .artikel__isi tbody tr:hover th {
+      background: rgba(88, 28, 135, 0.5);
+    }
+    /* Blok output: versi gelap dari blok kode terang */
+    .py-content .artikel__isi pre + pre {
+      background: #12151f !important;
+      color: #dbe4f0 !important;
+      border-color: #2b3040 !important;
+      border-left-color: #7c7f9a !important;
+    }
+    .py-content .artikel__isi pre + pre::before {
+      color: #7c7f9a !important;
+    }
+    .py-content .artikel__isi pre + pre code {
+      color: #dbe4f0 !important;
+    }
+    .py-article__meta {
+      color: var(--py-text-secondary);
+    }
+    .py-pager span {
+      color: var(--py-text-secondary);
+    }
+    .py-pager a:hover {
+      color: var(--py-accent);
+    }
   }
 
   /* Halaman rencana: kotak informasi, bukan konten kosong */
   .py-soon {
     margin-top: 1.5rem;
     padding: 1.5rem 1.25rem;
-    border: 1px dashed var(--py-border);
+    /* Kartu putih bergaya beranda: rounded-xl + shadow-md + border gray-100 */
+    border: 1px solid var(--py-card-border);
     border-radius: var(--py-radius);
     background: var(--py-surface);
+    box-shadow: var(--py-shadow-card);
   }
   .py-soon__lead {
-    font-weight: 600;
-    color: var(--py-text);
+    font-weight: 700;
+    color: var(--py-title);
     margin: 0 0 0.4rem;
+    font-size: 1.05rem;
   }
   .py-soon__body {
     color: var(--py-text-secondary);
@@ -315,8 +433,8 @@
     font-size: 0.72rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    color: var(--py-text-secondary);
-    font-weight: 600;
+    color: var(--py-subtitle);
+    font-weight: 700;
     margin: 0 0 0.6rem;
   }
   .py-pager ul {
@@ -332,9 +450,11 @@
     justify-content: space-between;
     gap: 0.75rem;
     padding: 0.55rem 0.7rem;
-    border: 1px solid var(--py-border);
-    border-radius: 8px;
+    /* Kartu putih bergaya beranda */
+    border: 1px solid var(--py-card-border);
+    border-radius: var(--py-radius);
     background: var(--py-surface);
+    box-shadow: var(--py-shadow);
   }
   .py-pager a {
     color: var(--py-text);
@@ -379,21 +499,30 @@
     .py-menu-btn {
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 0.4rem;
       margin: 0.75rem 1rem 0;
-      padding: 0.5rem 0.8rem;
-      border: 1px solid var(--py-border);
-      border-radius: 8px;
+      padding: 0.7rem 1rem;
+      min-height: 44px;
+      border: 1px solid var(--py-card-border);
+      border-radius: var(--py-radius);
       background: var(--py-surface);
-      color: var(--py-text);
+      color: var(--py-subtitle);
+      box-shadow: var(--py-shadow);
       font: inherit;
       font-size: 0.85rem;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
     }
     .py-menu-btn:hover {
-      background: var(--py-accent-soft);
-      color: var(--py-accent);
+      background: var(--py-accent-soft-strong);
+      color: var(--py-accent-hover);
+    }
+    .py-menu-btn:focus-visible,
+    .py-sidebar__close:focus-visible,
+    .py-overlay:focus-visible {
+      outline: 2px solid var(--py-accent);
+      outline-offset: 2px;
     }
     .py-sidebar {
       position: fixed;
