@@ -1,0 +1,181 @@
+---
+import { getCollection } from "astro:content";
+import { render } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import SidebarTree from "../../components/SidebarTree.astro";
+import MarkdownArtikel from "../../components/MarkdownArtikel.astro";
+import { TREE, sectionOfSlug } from "../../data/pythonTree";
+import PythonLayout from "../../components/PythonLayout.astro";
+
+/**
+ * Halaman utama Tutorial Python.
+ *
+ * Bentuknya: sidebar kiri = tree indeks seluruh materi, area tengah = isi
+ * artikel yang dipilih. Artikel tidak disalin ke sini; semuanya tetap file
+ * markdown di src/content/artikel/, dan halaman ini merendernya ulang.
+ *
+ * Artikel default adalah yang pertama di tree (Variabel & Tipe Data), supaya
+ * pengunjung langsung melihat materi, bukan halaman kosong.
+ */
+
+const DEFAULT_SLUG = "variabel-dan-tipe-data-python";
+
+const entries = (await getCollection("artikel")).sort(
+  (a, b) => b.data.tanggal.getTime() - a.data.tanggal.getTime()
+);
+
+const peta = new Map(entries.map((e) => [e.id, e]));
+const awal = peta.get(DEFAULT_SLUG) ?? entries[0];
+
+if (!awal) {
+  throw new Error("Tidak ada artikel untuk ditampilkan di /python/");
+}
+
+const { Content, headings } = await render(awal);
+const bagian = sectionOfSlug(awal.id);
+
+const jumlahArtikel = TREE.flatMap((s) => s.items).filter((i) => i.kind === "artikel").length;
+const totalMenit = entries.reduce((n, e) => n + (e.data.durasiBaca ?? 0), 0);
+---
+
+<BaseLayout
+  title="Tutorial Python — Belajar dari Dasar sampai Data Science"
+  description="Kumpulan tutorial pemrograman Python berbahasa Indonesia: variabel, operator, OOP, web framework, data science, dan machine learning. Setiap contoh kode dijalankan sebelum dipublikasikan."
+  showLangSwitch={false}
+>
+  <!-- CSS kerangka; komponen impor, tanpa output HTML -->
+  <PythonLayout />
+  <!-- Larangan pemindaian konten: CSS/JS inline sudah ada, tidak perlu gaya eksternal -->
+  <div class="py-page">
+    <header class="py-header">
+      <div class="py-header__inner">
+        <a href="/" class="py-header__home" aria-label="Kembali ke beranda">←</a>
+        <div class="py-header__title">
+          <span class="py-header__emoji" aria-hidden="true">🐍</span>
+          <h1>Tutorial Python</h1>
+        </div>
+        <p class="py-header__meta">
+          {jumlahArtikel} artikel · ±{totalMenit} menit baca · dibaca berurutan dari bab 1
+        </p>
+      </div>
+    </header>
+
+    <div class="py-layout">
+      <!-- Sidebar desktop; di layar sempit menjadi panel geser dari kiri -->
+      <button class="py-menu-btn" id="pyMenuBtn" aria-label="Buka indeks materi" aria-expanded="false">
+        ☰ Indeks Materi
+      </button>
+      <div class="py-overlay" id="pyOverlay" hidden></div>
+
+      <aside class="py-sidebar" id="pySidebar" aria-label="Indeks materi">
+        <div class="py-sidebar__head">
+          <span class="py-sidebar__caption">Indeks Materi</span>
+          <button class="py-sidebar__close" id="pyCloseBtn" aria-label="Tutup indeks">×</button>
+        </div>
+        <div class="py-sidebar__scroll">
+          <SidebarTree
+            activeSlug={awal.id}
+            activeSection={bagian?.id ?? TREE[0].id}
+          />
+        </div>
+      </aside>
+
+      <main class="py-main">
+        <article class="py-article">
+          <p class="py-article__crumb">
+            <a href="/python/">Tutorial Python</a> › {bagian?.label ?? "Materi"}
+          </p>
+          <p class="py-article__kicker">{awal.data.tema}</p>
+          <h2 class="py-article__title">{awal.data.judul}</h2>
+          <p class="py-article__ringkas">{awal.data.ringkasan}</p>
+          <div class="py-article__meta">
+            <span>Oleh {awal.data.penulis}</span>
+            <span aria-hidden="true">•</span>
+            <time datetime={awal.data.tanggal.toISOString()}>
+              {awal.data.tanggal.toLocaleDateString("id-ID", {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+              })}
+            </time>
+            {
+              awal.data.durasiBaca && (
+                <>
+                  <span aria-hidden="true">•</span>
+                  <span>{awal.data.durasiBaca} menit baca</span>
+                </>
+              )}
+            {
+              awal.data.diverifikasi && (
+                <>
+                  <span aria-hidden="true">•</span>
+                  <span title="Versi Python tempat semua contoh kode dijalankan">
+                    Diverifikasi pada {awal.data.diverifikasi.replace("Python ", "")}
+                  </span>
+                </>
+              )}
+          </div>
+
+          <div class="py-content">
+            <MarkdownArtikel headings={headings}>
+              <Content />
+            </MarkdownArtikel>
+          </div>
+
+          <nav class="py-pager" aria-label="Artikel lain">
+            <p class="py-pager__lead">Lanjut membaca</p>
+            <ul>
+              {
+                entries
+                  .filter((e) => e.id !== awal.id)
+                  .slice(0, 4)
+                  .map((e) => (
+                    <li>
+                      <a href="/python/{e.id}/">{e.data.judul}</a>
+                      <span>{e.data.tema}</span>
+                    </li>
+                  ))
+              }
+            </ul>
+          </nav>
+        </article>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    import { getCollection, render } from "astro:content";
+    import { TREE } from "../data/pythonTree";
+
+    /**
+     * Panel indeks di layar sempit.
+     *
+     * Di desktop sidebar selalu tampil. Di ponsel, ia disembunyikan dan dibuka
+     * lewat tombol; memilih isi indeks harus menutup panel agar artikel
+     * terlihat, bukan tertutup panel yang terbuka.
+     */
+
+    const tombolMenu = document.getElementById("pyMenuBtn");
+    const tombolTutup = document.getElementById("pyCloseBtn");
+    const sidebar = document.getElementById("pySidebar");
+    const overlay = document.getElementById("pyOverlay");
+
+    function bukaPanel() {
+      sidebar?.classList.add("py-sidebar--open");
+      if (overlay) overlay.hidden = false;
+      tombolMenu?.setAttribute("aria-expanded", "true");
+    }
+    function tutupPanel() {
+      sidebar?.classList.remove("py-sidebar--open");
+      if (overlay) overlay.hidden = true;
+      tombolMenu?.setAttribute("aria-expanded", "false");
+    }
+
+    tombolMenu?.addEventListener("click", bukaPanel);
+    tombolTutup?.addEventListener("click", tutupPanel);
+    overlay?.addEventListener("click", tutupPanel);
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") tutupPanel();
+    });
+  </script>
+</BaseLayout>

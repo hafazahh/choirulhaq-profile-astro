@@ -6,9 +6,8 @@ tanggal: 2026-11-18
 diverifikasi: "Python 3.11.16"
 durasiBaca: 7
 ---
-# Pendahuluan
+## Pendahuluan
 Di era perkembangan artificial intelligence saat ini, hampir semua kode bisa dihasilkan oleh AI hanya dengan perintah sederhana, tanpa harus benar-benar memahami dasar pemrograman. Namun, justru karena kemudahan itu, kemampuan dasar seperti memahami bagaimana cara membuat kode program yang benar di Python menjadi semakin penting. Bukan semata-mata untuk menulis kode dari nol, melainkan untuk membangun intuisi tentang apa yang sebenarnya ingin kamu buat, sekaligus memiliki ketelitian untuk memeriksa dan memperbaiki hasil yang dihasilkan AI. Tanpa pemahaman dasar yang cukup, kamu bisa saja menerima kode yang tampak benar, padahal mengandung kesalahan kecil yang berpotensi merusak keseluruhan program.
-# Variabel dan Tipe Data di Python: Panduan Lengkap dengan Latihan
 
 Hampir semua error yang dialami pemula di Python bukan karena kesalahan logika, melainkan karena kurangnya pemahaman tentang tipe data. Contohnya, ketika kamu menulis `"5" + 3`, Python langsung memunculkan error. Begitu pula saat menulis `int("3.5")`. Kedua kode tersebut sebenarnya valid secara sintaks, tetapi gagal dijalankan karena asumsi yang salah tentang tipe data.
 

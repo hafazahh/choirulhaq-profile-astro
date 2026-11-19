@@ -7,11 +7,9 @@ diverifikasi: "Python 3.11.16"
 durasiBaca: 7
 ---
 
-# Operator Python dan Urutan Prioritasnya: Kenapa 2+3*4 Bukan 20
-
 Coba tebak hasil `2 + 3 * 4`. Kalau jawabanmu 20, kamu membaca dari kiri ke kanan seperti kalkulator sederhana. Python menjawab 14, karena perkalian dikerjakan lebih dulu.
 
-Ini bukan tebak-tebakan, tapi aturan urutan prioritas operator selalu mengikuti aturan dari Matemetika Aljabar. Salah memahami prioritas operator menghasilkan bug yang lolos dari mata — kodenya jalan, angkanya masuk akal, tapi salah, oleh karena itu perlu bagi kamu untuk membuka kembali buku dasar aljabar jika ingin mendalami atau mempelajari pemrograman bahasa apapun yang tidak terkhusus pada Python saja. Artikel ini membahas operator Python, urutan eksekusinya, dan lima jebakan yang paling sering menimpa orang yang baru pindah dari bahasa lain.
+Ini bukan tebak-tebakan, tapi aturan urutan prioritas operator selalu mengikuti aturan dari Matematika Aljabar. Salah memahami prioritas operator menghasilkan bug yang lolos dari mata — kodenya jalan, angkanya masuk akal, tapi salah, oleh karena itu perlu bagi kamu untuk membuka kembali buku dasar aljabar jika ingin mendalami atau mempelajari pemrograman bahasa apapun yang tidak terkhusus pada Python saja. Artikel ini membahas operator Python, urutan eksekusinya, dan lima jebakan yang paling sering menimpa orang yang baru pindah dari bahasa lain.
 
 Semua contoh dijalankan di Python 3.11 dan output yang ditampilkan adalah keluaran asli.
 

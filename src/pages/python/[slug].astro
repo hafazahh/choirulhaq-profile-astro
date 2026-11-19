@@ -1,0 +1,205 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import SidebarTree from "../../components/SidebarTree.astro";
+import MarkdownArtikel from "../../components/MarkdownArtikel.astro";
+import { sectionOfSlug, TREE } from "../../data/pythonTree";
+import PythonLayout from "../../components/PythonLayout.astro";
+
+/**
+ * Satu rute untuk semua materi Python: /python/<slug>/
+ *
+ * Dua jenis halaman, dipilih otomatis supaya tidak ada tautan mati di tree:
+ *
+ *  1. Artikel  — slug ada di src/content/artikel/, dirender dari markdown.
+ *  2. Rencana  — slug terdaftar di tree tetapi belum ditulis. Halamannya bukan
+ *                halaman kosong: ia menyebut materi akan dibahas dan mengarah
+ *                ke materi lain. Setelah berkas markdown dibuat, rute yang sama
+ *                otomatis berubah menjadi artikel sungguhan.
+ */
+
+const artikel = await getCollection("artikel");
+const entry = artikel.find((a) => a.id === Astro.params.slug);
+
+/** Dirender di frontmatter: `render()` memakai await, tidak boleh di dalam
+ *  IIFE biasa di badan template. */
+const renderArtikel = entry ? await render(entry) : null;
+
+/** Cari label+bab dari tree — dipakai artikel maupun halaman rencana. */
+const cocok = TREE.flatMap((section) =>
+  section.items.filter((i) => i.slug === Astro.params.slug).map((item) => ({ item, section }))
+)[0];
+
+/**
+ * Semua slug yang punya halaman: artikel yang sudah ditulis + slug rencana
+ * yang terdaftar di tree.
+ *
+ * `getCollection` dipanggil ulang di dalam fungsi, bukan memakai variabel luar
+ * — Astro mengangkat (hoist) `getStaticPaths` ke bagian atas berkas, sehingga
+ * const frontmatter yang terlihat "setelah" fungsi belum tentu sudah terisi
+ * saat fungsi dijalankan.
+ */
+export async function getStaticPaths() {
+  const artikel = await getCollection("artikel");
+  const punyaArtikel = new Set(artikel.map((a) => a.id));
+
+  const dariTree = TREE.flatMap((s) => s.items)
+    .filter((i) => i.slug)
+    .map((i) => i.slug!);
+
+  const dariKoleksi = [...punyaArtikel].filter((s) => !dariTree.includes(s));
+
+  return [...dariTree, ...dariKoleksi].map((slug) => ({ params: { slug } }));
+}
+
+const bagian = sectionOfSlug(Astro.params.slug!);
+const labelMateri = cocok?.item.label ?? Astro.params.slug!;
+---
+
+{
+  entry && renderArtikel ? (
+    /* ---------- artikel sungguhan ---------- */
+    (() => {
+      const { Content, headings } = renderArtikel;
+      return (
+        <BaseLayout title={`${entry.data.judul} — Tutorial Python`} description={entry.data.ringkasan}
+          showLangSwitch={false}>
+          <PythonLayout />
+          <div class="py-page">
+            <header class="py-header">
+              <div class="py-header__inner">
+                <a href="/" class="py-header__home" aria-label="Kembali ke beranda">←</a>
+                <div class="py-header__title">
+                  <span class="py-header__emoji" aria-hidden="true">🐍</span>
+                  <h1>Tutorial Python</h1>
+                </div>
+                <a href="/python/" class="py-header__back">Indeks materi</a>
+              </div>
+            </header>
+
+            <div class="py-layout">
+              <aside class="py-sidebar" aria-label="Indeks materi">
+                <div class="py-sidebar__head">
+                  <span class="py-sidebar__caption">Indeks Materi</span>
+                </div>
+                <div class="py-sidebar__scroll">
+                  <SidebarTree activeSlug={entry.id} activeSection={bagian?.id} />
+                </div>
+              </aside>
+
+              <main class="py-main">
+                <article class="py-article">
+                  <p class="py-article__crumb">
+                    <a href="/python/">Tutorial Python</a> › {bagian?.label ?? "Materi"}
+                  </p>
+                  <p class="py-article__kicker">{entry.data.tema}</p>
+                  <h2 class="py-article__title">{entry.data.judul}</h2>
+                  <p class="py-article__ringkas">{entry.data.ringkasan}</p>
+                  <div class="py-article__meta">
+                    <span>Oleh {entry.data.penulis}</span>
+                    <span aria-hidden="true">•</span>
+                    <time datetime={entry.data.tanggal.toISOString()}>
+                      {entry.data.tanggal.toLocaleDateString("id-ID", {
+                        day: "numeric",
+                        month: "long",
+                        year: "numeric",
+                      })}
+                    </time>
+                    {entry.data.durasiBaca && (
+                      <>
+                        <span aria-hidden="true">•</span>
+                        <span>{entry.data.durasiBaca} menit baca</span>
+                      </>
+                    )}
+                    {entry.data.diverifikasi && (
+                      <>
+                        <span aria-hidden="true">•</span>
+                        <span title="Versi Python tempat semua contoh kode dijalankan">
+                          Diverifikasi pada {entry.data.diverifikasi.replace("Python ", "")}
+                        </span>
+                      </>
+                    )}
+                  </div>
+
+                  <div class="py-content">
+                    <MarkdownArtikel headings={headings}>
+                      <Content />
+                    </MarkdownArtikel>
+                  </div>
+                </article>
+              </main>
+            </div>
+          </div>
+
+          <script
+            type="application/ld+json"
+            set:html={JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Article",
+              headline: entry.data.judul,
+              description: entry.data.ringkasan,
+              datePublished: entry.data.tanggal.toISOString(),
+              author: { "@type": "Person", name: entry.data.penulis },
+              publisher: {
+                "@type": "Organization",
+                name: "Choirul Haq",
+                url: "https://choirulhaq.com",
+              },
+              mainEntityOfPage: `https://choirulhaq.com/python/${entry.id}/`,
+              inLanguage: "id-ID",
+            })}
+          />
+        </BaseLayout>
+      );
+    })()
+  ) : cocok ? (
+    /* ---------- halaman rencana ---------- */
+    <BaseLayout title={`${labelMateri} — Tutorial Python`} description="Materi yang sedang disiapkan.">
+      <PythonLayout />
+      <div class="py-page">
+        <header class="py-header">
+          <div class="py-header__inner">
+            <a href="/" class="py-header__home" aria-label="Kembali ke beranda">←</a>
+            <div class="py-header__title">
+              <span class="py-header__emoji" aria-hidden="true">🐍</span>
+              <h1>Tutorial Python</h1>
+            </div>
+            <a href="/python/" class="py-header__back">Indeks materi</a>
+          </div>
+        </header>
+
+        <div class="py-layout">
+          <aside class="py-sidebar" aria-label="Indeks materi">
+            <div class="py-sidebar__head">
+              <span class="py-sidebar__caption">Indeks Materi</span>
+            </div>
+            <div class="py-sidebar__scroll">
+              <SidebarTree activeSlug={Astro.params.slug} activeSection={bagian?.id} />
+            </div>
+          </aside>
+
+          <main class="py-main">
+            <article class="py-article">
+              <p class="py-article__crumb">
+                <a href="/python/">Tutorial Python</a> › {cocok.section.label}
+              </p>
+              <p class="py-article__kicker">{cocok.section.label.replace(/^\d+\.\s*/, "")}</p>
+              <h2 class="py-article__title">{labelMateri}</h2>
+
+              <div class="py-content">
+                <div class="py-soon">
+                  <p class="py-soon__lead">Materi ini sedang disiapkan.</p>
+                  <p class="py-soon__body">
+                    Halaman ini akan berisi penjelasan lengkap dengan contoh kode yang dijalankan lebih
+                    dulu. Untuk sementara, materi yang sudah tersedia bisa dibaca dari indeks di
+                    sebelah kiri.
+                  </p>
+                </div>
+              </div>
+            </article>
+          </main>
+        </div>
+      </div>
+    </BaseLayout>
+  ) : null
+}

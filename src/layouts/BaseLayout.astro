@@ -6,8 +6,15 @@ import FloatingAd from "../components/FloatingAd.astro";
 interface Props {
   title: string;
   description?: string;
+  /**
+   * Pemilih bahasa ID/EN hanya berguna pada halaman yang teksnya ditandai
+   * `data-i18n`. Halaman artikel tidak memakai penanda itu, jadi tombolnya
+   * hanya ruang terbuang — dan karena posisinya `fixed` di kanan atas, ia juga
+   * menutupi isi header halaman tersebut.
+   */
+  showLangSwitch?: boolean;
 }
-const { title, description = "Profil Choirul Haq — Tech Enthusiast, tutorial Python/Networking, dan project AI/Ekonomi Indonesia" } = Astro.props;
+const { title, description = "Profil Choirul Haq — Tech Enthusiast, tutorial Python/Networking, dan project AI/Ekonomi Indonesia", showLangSwitch = true } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 ---
 
@@ -29,7 +36,6 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <title>{title}</title>
   </head>
   <body>
-    <LanguageSwitcher />
     <a
       href="#main-content"
       class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-white focus:text-purple-700 focus:px-4 focus:py-2 focus:rounded"
@@ -39,6 +45,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <main id="main-content">
       <slot />
     </main>
+    {showLangSwitch && <LanguageSwitcher />}
     <FloatingAd />
   </body>
 </html>
